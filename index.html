@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Slidey</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="app">
+		<div class="editor" id="editor">
+			<div class="editor-info">
+				<p>Press <b>ESC</b> to switch modes (edit/view)</p>
+				<p>Press <b>Tab</b> to switch colors on and off (in view mode)</p>
+				<p>Press <b>F2</b> to import (in edit mode)</p>
+				<p>Press <b>F3</b> to export (in edit mode)</p>
+			</div>
+			<div class="list" id="list"></div>
+		</div>
+		<div class="viewer" id="viewer" style="display:none">
+			<p class="frame" style="background-color:white;color:black">No slides</p>
+		</div>
+	</div>
+	<template id="cardTemplate">
+		<div class="card">
+			<div class="card-col">
+				<div class="card-handle">⠿</div>
+			</div>
+			<div class="card-col">
+				<p class="card-id">{{id}}</p>
+				<div class="buttons">
+					<button class="button-add">+</button>
+					<button class="button-remove">x</button>
+				</div>
+				<textarea class="text"></textarea>
+			</div>
+		</div>
+	</template>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
