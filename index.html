@@ -16,6 +16,7 @@
 				<p>Press <b>Tab</b> to switch colors on and off (in view mode)</p>
 				<p>Press <b>F2</b> to import (in edit mode)</p>
 				<p>Press <b>F3</b> to export (in edit mode)</p>
+				<p id="info-total"></p>
 			</div>
 			<div class="list" id="list"></div>
 		</div>
@@ -25,17 +26,13 @@
 	</div>
 	<template id="cardTemplate">
 		<div class="card">
-			<div class="card-col">
-				<div class="card-handle">⠿</div>
+			<div class="card-handle">⠿</div>
+			<p class="card-id">{{id}}</p>
+			<div class="buttons">
+				<button class="button-add">+</button>
+				<button class="button-remove">x</button>
 			</div>
-			<div class="card-col">
-				<p class="card-id">{{id}}</p>
-				<div class="buttons">
-					<button class="button-add">+</button>
-					<button class="button-remove">x</button>
-				</div>
-				<textarea class="text"></textarea>
-			</div>
+			<textarea class="text"></textarea>
 		</div>
 	</template>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

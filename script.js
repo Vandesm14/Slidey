@@ -101,6 +101,7 @@ function updateCards() {
 	calcListeners();
 	calcCards();
 	createSortable($('#list')[0]);
+	$('#info-total').text(cards.length === 1 ? '1 Slide' : cards.length + ' Slides');
 }
 
 function calcListeners() {
@@ -187,7 +188,7 @@ function createSortable(el) {
 	Sortable.create(el, {
 		animation: 150,
 		invertSwap: true,
-		onEnd: calcCards
+		onEnd: updateCards
 	});
 }
 
