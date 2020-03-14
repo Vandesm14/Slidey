@@ -71,22 +71,22 @@ a, a:visited {
   user-select: none;
 }
 
-.frame.red {
+.red {
   background-color: #db3737;
 }
-.frame.orange {
+.orange {
   background-color: #dd9d2e;
 }
-.frame.green {
+.green {
   background-color: #38ba2c;
 }
-.frame.cyan {
+.cyan {
   background-color: #2bb0ce;
 }
-.frame.blue {
+.blue {
   background-color: #4046bc;
 }
-.frame.purple {
+.purple {
   background-color: #9540bc;
 }
 
@@ -129,7 +129,10 @@ a, a:visited {
 }
 
 .card-id {
-  margin-bottom: 2px;
+  height: 26px;
+  border-radius: 4px;
+  color: white;
+  font-size: 20px;
 }
 
 .buttons {

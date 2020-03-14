@@ -42,7 +42,7 @@ $(document).ready(function () {
 			}
 			navigator.clipboard.writeText(cards.join('\n'))
 				.then(() => {
-					alert('Item Copied!');
+					// alert('Item Copied!');
 				})
 				.catch(err => {
 					alert('Error copying item<br>' + err);
@@ -105,6 +105,15 @@ function updateCards() {
 }
 
 function calcListeners() {
+	$('.card-id').off('click');
+	$('.card-id').on('click', function (e) {
+		e.stopPropagation();
+		slide = $(this).closest('.card').index();
+		setView(true);
+		viewMode = true;
+		view();
+	});
+
 	$('.button-add').off('click');
 	$('.button-add').on('click', function () {
 		let template = $('#cardTemplate').html();
@@ -120,7 +129,7 @@ function calcListeners() {
 
 	$('.text').off('keyup');
 	$('.text').on('keyup', function () {
-		$(this).css('height', '5px');
+		$(this).css('height', '38px');
 		$(this).css('height', $(this)[0].scrollHeight + 'px');
 		calcCards();
 		updateFrames();
@@ -157,6 +166,7 @@ function view() {
 }
 
 function setView(step = false) {
+	console.trace(step);
 	if (step) {
 		$('#viewer').css('margin-left', -vw * slide);
 	} else if (theme) {
@@ -176,6 +186,7 @@ function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
 		$('#viewer').append(`<p class="frame ${colors[i % colors.length]}">${cards[i]}</p>`);
+		$('#list > .card').eq(i).find('.card-id').attr('class', 'card-id ' + colors[i % colors.length]);
 	}
 	if (!theme) {
 		for (let color of colors) {
