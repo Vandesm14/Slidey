@@ -134,7 +134,18 @@ function calcListeners() {
 		calcCards();
 		updateFrames();
 	});
+
+	$('.text').off('keydown');
+	$('.text').on('keydown', function (e) {
+		if (e.key === 'Enter' && e.shiftKey) {
+			e.preventDefault();
+			let template = $('#cardTemplate').html();
+			$(this).closest('.card').after(template);
+			$(this).closest('.card').next().find('.text').focus();
+			updateCards();
 		}
+	});
+}
 
 function calcCards() {
 	cards = [];
