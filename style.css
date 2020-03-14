@@ -45,6 +45,9 @@ a, a:visited {
   background-color: black;
   cursor: none;
 }
+.viewer.invert {
+  background-color: white;
+}
 
 .editor-info {
   margin: 10px 0;
@@ -92,6 +95,9 @@ a, a:visited {
 
 .viewer > .frame.show {
   color: white;
+}
+.viewer.invert > .frame.show {
+	color: black;
 }
 
 .list {

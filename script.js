@@ -2,7 +2,7 @@ var cards = [];
 var backgrounds = [];
 var colors = ['red', 'orange', 'green', 'cyan', 'blue', 'purple'];
 
-var theme = true;
+var theme = 0;
 var viewMode = false;
 var slide = 0;
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
 			view();
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
-			theme = !theme;
+			theme = (theme + 1) % 3;
 			updateFrames();
 		} else if (e.key === 'F2' && !viewMode) {
 			if (!clipboardPerms) {
@@ -134,7 +134,7 @@ function calcListeners() {
 		calcCards();
 		updateFrames();
 	});
-}
+		}
 
 function calcCards() {
 	cards = [];
@@ -165,18 +165,15 @@ function view() {
 	}
 }
 
-function setView(step = false) {
-	console.trace(step);
-	if (step) {
+function setView(override = false) {
+	if (override || theme) {
+		$('#viewer').stop(true, true);
 		$('#viewer').css('margin-left', -vw * slide);
-	} else if (theme) {
+	} else {
 		$('#viewer').stop(true, true);
 		$('#viewer').animate({
 			marginLeft: -vw * slide
 		}, 300);
-	} else if (!theme) {
-		$('#viewer').stop(true, true);
-		$('#viewer').css('margin-left', -vw * slide);
 	}
 	$('.show').removeClass('show');
 	$('.viewer > .frame').eq(slide).addClass('show');
@@ -188,10 +185,15 @@ function updateFrames() {
 		$('#viewer').append(`<p class="frame ${colors[i % colors.length]}">${cards[i]}</p>`);
 		$('#list > .card').eq(i).find('.card-id').attr('class', 'card-id ' + colors[i % colors.length]);
 	}
-	if (!theme) {
+	if (theme) {
 		for (let color of colors) {
 			$(`.frame.${color}`).removeClass(color);
 		}
+	}
+	if (theme === 1) {
+		$('#viewer').addClass('invert');
+	} else {
+		$('#viewer').removeClass('invert');
 	}
 }
 
