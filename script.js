@@ -1,6 +1,6 @@
 // TODO: Replace with .bind
 const render = (text) => {
-	return markdownit().render(text);
+	return markdownit({breaks: true}).render(text);
 };
 
 var cards = [];
@@ -121,7 +121,7 @@ function calcListeners() {
 
 	$('.button-position').off('click');
 	$('.button-position').on('click', function () {
-		
+
 	});
 
 	$('.button-add').off('click');
@@ -178,10 +178,15 @@ function fromCards() {
 
 function view() {
 	if (viewMode) {
-		$('#editor').hide();
 		$('#viewer').show();
+		$('#editor').hide();
 	} else {
 		$('#editor').show();
+		if (slide > 1) {
+			$('#editor').scrollTo(`.card:eq(${slide})`, 500);
+		} else {
+			$('#editor').scrollTo(0, 500);
+		}
 		$('#viewer').hide();
 	}
 }
@@ -203,7 +208,7 @@ function setView(override = false) {
 function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
-		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${render(cards[i]).replace(/\n/g, '<br>')}</div>`);
+		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${render(cards[i])}</div>`);
 		$('#list > .card').eq(i).find('.card-id').attr('class', 'card-id ' + colors[i % colors.length]);
 	}
 	if (theme) {
@@ -222,6 +227,8 @@ function createSortable(el) {
 	Sortable.create(el, {
 		animation: 150,
 		invertSwap: true,
+		handle: '.card-id',
+		// filter: '.text',
 		onEnd: updateCards
 	});
 }

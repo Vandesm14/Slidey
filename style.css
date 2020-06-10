@@ -6,7 +6,7 @@ html, body, .app {
 }
 
 body {
-  background: linear-gradient(0deg, rgb(7, 80, 0) 15%, rgb(29, 153, 4) 48%, rgba(37,216,0,1) 100%);
+  background: linear-gradient(0deg, hsl(110, 70%, 30%) 0%, hsl(110, 80%, 60%) 100%);
   color: black;
   font-family: Calibri, sans-serif;
 }
@@ -25,6 +25,26 @@ a, a:visited {
   display: flex;
   overflow: hidden;
   flex-direction: column;
+}
+
+/* ----------Global---------- */
+.red {
+  background-color: #db3737 !important;
+}
+.orange {
+  background-color: #dd9d2e !important;
+}
+.green {
+  background-color: #38ba2c !important;
+}
+.cyan {
+  background-color: #2bb0ce !important;
+}
+.blue {
+  background-color: #4046bc !important;
+}
+.purple {
+  background-color: #9540bc !important;
 }
 
 /* ----------App---------- */
@@ -70,28 +90,8 @@ a, a:visited {
   color: transparent;
   text-align: center;
   font-size: 36px;
-  transition: color 300ms ease-out;
 
   user-select: none;
-}
-
-.red {
-  background-color: #db3737 !important;
-}
-.orange {
-  background-color: #dd9d2e !important;
-}
-.green {
-  background-color: #38ba2c !important;
-}
-.cyan {
-  background-color: #2bb0ce !important;
-}
-.blue {
-  background-color: #4046bc !important;
-}
-.purple {
-  background-color: #9540bc !important;
 }
 
 .viewer > .frame.show {
@@ -99,6 +99,18 @@ a, a:visited {
 }
 .viewer.invert > .frame.show {
 	color: black;
+}
+
+.viewer > .frame > * {
+	opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+.viewer > .frame.show > * {
+	opacity: 1;
+}
+
+.viewer > .frame > p {
+	margin: 0.6em 0;
 }
 
 .list {
@@ -110,12 +122,11 @@ a, a:visited {
 
 .card {
   display: flex;
-  align-items: center;
+  /*! align-items: center; */
   flex-direction: row;
   justify-content: space-between;
   margin: 4px auto;
-  padding: 3px 6px;
-  /* border: 1px solid #b5b5b5; */
+  padding: 0 6px;
 	border-radius: 4px;
 	background-color: white;
 }
@@ -124,8 +135,9 @@ a, a:visited {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: auto 4px;
+  margin: 4px;
   width: 7%;
+  height: max-content;
 }
 
 .buttons > button {
@@ -141,11 +153,12 @@ a, a:visited {
 }
 
 .buttons > .card-id {
-  height: 26px;
+  height: 25px;
   border-radius: 4px;
   color: white;
 	font-size: 20px;
 	cursor: move;
+	padding-top: 0px;
 }
 
 .buttons > .button-position, .buttons > .button-type {
@@ -161,13 +174,13 @@ a, a:visited {
 }
 
 .text {
-  margin: 0 4px;
+  margin: auto 4px;
   padding: 4px;
   max-height: 30vh;
   width: 34vw;
-  height: 46px;
+  height: 48px;
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   background-color: #c0c0c0;
   text-align: center;
 }
