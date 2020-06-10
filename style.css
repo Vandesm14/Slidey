@@ -6,7 +6,7 @@ html, body, .app {
 }
 
 body {
-  background-color: white;
+  background: linear-gradient(0deg, rgb(7, 80, 0) 15%, rgb(29, 153, 4) 48%, rgba(37,216,0,1) 100%);
   color: black;
   font-family: Calibri, sans-serif;
 }
@@ -76,22 +76,22 @@ a, a:visited {
 }
 
 .red {
-  background-color: #db3737;
+  background-color: #db3737 !important;
 }
 .orange {
-  background-color: #dd9d2e;
+  background-color: #dd9d2e !important;
 }
 .green {
-  background-color: #38ba2c;
+  background-color: #38ba2c !important;
 }
 .cyan {
-  background-color: #2bb0ce;
+  background-color: #2bb0ce !important;
 }
 .blue {
-  background-color: #4046bc;
+  background-color: #4046bc !important;
 }
 .purple {
-  background-color: #9540bc;
+  background-color: #9540bc !important;
 }
 
 .viewer > .frame.show {
@@ -115,31 +115,9 @@ a, a:visited {
   justify-content: space-between;
   margin: 4px auto;
   padding: 3px 6px;
-  border: 1px solid #b5b5b5;
-  border-radius: 4px;
-}
-
-.card-col {
-  display: flex;
-  flex-direction: column;
-}
-
-.card-handle {
-  margin: auto;
-  margin-right: 3px;
-  margin-left: -5px;
-  font-size: 20px;
-  cursor: grab;
-}
-.card-handle:active {
-  cursor: grabbing;
-}
-
-.card-id {
-  height: 26px;
-  border-radius: 4px;
-  color: white;
-  font-size: 20px;
+  /* border: 1px solid #b5b5b5; */
+	border-radius: 4px;
+	background-color: white;
 }
 
 .buttons {
@@ -155,17 +133,30 @@ a, a:visited {
   padding: 2px;
   border: none;
   border-radius: 4px;
-  color: white;
+	color: white;
   font-weight: 900;
   font-size: 18px;
+	background-color: #aaaaaa;
   font-family: Calibri, sans-serif;
 }
 
-.button-add {
+.buttons > .card-id {
+  height: 26px;
+  border-radius: 4px;
+  color: white;
+	font-size: 20px;
+	cursor: move;
+}
+
+.buttons > .button-position, .buttons > .button-type {
+	color: transparent;
+}
+
+.buttons > .button-add {
   background-color: #3faf3f;
 }
 
-.button-remove {
+.buttons > .button-remove {
   background-color: #de3a3a;
 }
 
@@ -177,6 +168,6 @@ a, a:visited {
   height: 46px;
   border: none;
   border-radius: 2px;
-  background-color: #e7e7e7;
+  background-color: #c0c0c0;
   text-align: center;
 }

@@ -119,6 +119,11 @@ function calcListeners() {
 		view();
 	});
 
+	$('.button-position').off('click');
+	$('.button-position').on('click', function () {
+		
+	});
+
 	$('.button-add').off('click');
 	$('.button-add').on('click', function () {
 		let template = $('#cardTemplate').html();
