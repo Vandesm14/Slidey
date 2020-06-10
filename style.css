@@ -59,7 +59,8 @@ a, a:visited {
 }
 
 .viewer > .frame {
-  display: flex;
+	display: flex;
+	flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: auto;

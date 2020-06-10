@@ -1,3 +1,8 @@
+// TODO: Replace with .bind
+const render = (text) => {
+	return markdownit().render(text);
+};
+
 var cards = [];
 var backgrounds = [];
 var colors = ['red', 'orange', 'green', 'cyan', 'blue', 'purple'];
@@ -193,7 +198,7 @@ function setView(override = false) {
 function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
-		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${cards[i].replace(/\n/g, '<br>')}</div>`);
+		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${render(cards[i]).replace(/\n/g, '<br>')}</div>`);
 		$('#list > .card').eq(i).find('.card-id').attr('class', 'card-id ' + colors[i % colors.length]);
 	}
 	if (theme) {
