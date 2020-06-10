@@ -193,7 +193,7 @@ function setView(override = false) {
 function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
-		$('#viewer').append(`<p class="frame ${colors[i % colors.length]}">${cards[i]}</p>`);
+		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${cards[i].replace(/\n/g, '<br>')}</div>`);
 		$('#list > .card').eq(i).find('.card-id').attr('class', 'card-id ' + colors[i % colors.length]);
 	}
 	if (theme) {
