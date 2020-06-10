@@ -1,6 +1,8 @@
 // TODO: Replace with .bind
 const render = (text) => {
-	return markdownit({breaks: true}).render(text);
+	return markdownit({
+		breaks: true
+	}).render(text);
 };
 
 var cards = [];
@@ -34,7 +36,11 @@ $(document).ready(function () {
 			}
 			navigator.clipboard.readText()
 				.then(text => {
-					cards = text.split('\n').filter(el => el);
+					cards = text.split('\n').map(el => {
+						return {
+							text: el
+						};
+					});
 					fromCards();
 				})
 				.catch(err => {
@@ -45,7 +51,7 @@ $(document).ready(function () {
 			if (!clipboardPerms) {
 				testPermission();
 			}
-			navigator.clipboard.writeText(cards.join('\n'))
+			navigator.clipboard.writeText(cards.map(el => el.text).join('\n'))
 				.then(() => {
 					// alert('Item Copied!');
 				})
@@ -121,7 +127,10 @@ function calcListeners() {
 
 	$('.button-position').off('click');
 	$('.button-position').on('click', function () {
-
+		let img = $(this).find('img');
+		let pos = img.attr('src');
+		img.attr('src', `icons/pos-${(pos.match(/[0-9]+/)[0]+1) % 9}.png`);
+		updateCards();
 	});
 
 	$('.button-add').off('click');
@@ -139,7 +148,7 @@ function calcListeners() {
 
 	$('.text').off('keyup');
 	$('.text').on('keyup', function () {
-		$(this).css('height', '38px');
+		$(this).css('height', '44px');
 		$(this).css('height', $(this)[0].scrollHeight + 'px');
 		calcCards();
 		updateFrames();
@@ -160,7 +169,10 @@ function calcListeners() {
 function calcCards() {
 	cards = [];
 	$('.card').each(function (el) {
-		cards.push($(this).find('.text').val());
+		cards.push({
+			text: $(this).find('.text').val(),
+			pos: $(this).find('.button-position > img').attr('src').match(/[0-9]+/)[0]
+		});
 	});
 	updateFrames();
 }
@@ -170,7 +182,7 @@ function fromCards() {
 	for (let card of cards) {
 		let template = $('#cardTemplate').html();
 		$('#list').append(template);
-		$('.card:last-child').find('.text').val(card);
+		$('.card:last-child').find('.text').val(card.text);
 	}
 	updateCards();
 	updateFrames();
@@ -208,9 +220,16 @@ function setView(override = false) {
 function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
-		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${render(cards[i])}</div>`);
-		$('#list > .card').eq(i).find('.card-id').attr('class', 'card-id ' + colors[i % colors.length]);
+		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${render(cards[i].text)}</div>`)
+		$('#viewer > .frame').eq(i).addClass(
+			$('#list > .card').eq(i).find('.button-position > img')
+			.attr('src').match(/pos-[0-9]+/)[0]);
+
+		$('#list > .card').eq(i).find('.card-id')
+		.attr('class', 'card-id ' + colors[i % colors.length]);
 	}
+	$('.image-only').removeClass('.image-only');
+	$('#viewer > .frame > p:only-child > img:only-child').parent().addClass('image-only');
 	if (theme) {
 		for (let color of colors) {
 			$(`.frame.${color}`).removeClass(color);

@@ -79,38 +79,81 @@ a, a:visited {
 }
 
 .viewer > .frame {
-	display: flex;
-	flex-direction: column;
+  display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   margin: auto;
   padding: 0 2vw;
   width: calc(100vw - 4vw);
   height: 100%;
-  color: transparent;
+  color: white;
   text-align: center;
   font-size: 36px;
 
   user-select: none;
 }
-
-.viewer > .frame.show {
-  color: white;
+.viewer > .frame.pos-1 { /* Top Left */
+	justify-content: start;
+	align-items: start;
+	text-align: left;
 }
-.viewer.invert > .frame.show {
-	color: black;
+.viewer > .frame.pos-2 { /* Top Middle */
+	justify-content: start;
+	align-items: center;
+}
+.viewer > .frame.pos-3 { /* Top Right */
+	justify-content: start;
+	align-items: end;
+	text-align: right;
+}
+.viewer > .frame.pos-4 { /* Middle Right */
+	align-items: end;
+	text-align: right;
+}
+.viewer > .frame.pos-5 { /* Bottom Right */
+	justify-content: end;
+	align-items: end;
+	text-align: right;
+}
+.viewer > .frame.pos-6 { /* Bottom Middle */
+	justify-content: end;
+}
+.viewer > .frame.pos-7 { /* Bottom Left */
+	justify-content: end;
+	align-items: start;
+	text-align: left;
+}
+.viewer > .frame.pos-8 { /* Middle Left */
+	align-items: start;
+	text-align: left;
 }
 
+.viewer.invert > .frame > * {
+  color: black;
+}
 .viewer > .frame > * {
-	opacity: 0;
+  opacity: 0;
   transition: opacity 300ms ease-out;
 }
 .viewer > .frame.show > * {
-	opacity: 1;
+  opacity: 1;
 }
 
 .viewer > .frame > p {
-	margin: 0.6em 0;
+  margin: 0.6em 0;
+}
+
+.viewer > .frame > p.image-only {
+  width: 90%;
+  height: 90%;
+}
+
+.viewer > .frame > p.image-only > img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
 }
 
 .list {
@@ -122,47 +165,43 @@ a, a:visited {
 
 .card {
   display: flex;
-  /*! align-items: center; */
   flex-direction: row;
   justify-content: space-between;
   margin: 4px auto;
   padding: 0 6px;
-	border-radius: 4px;
-	background-color: white;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .buttons {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   margin: 4px;
-  width: 7%;
-  height: max-content;
+  /* width: 7%; */
 }
 
 .buttons > button {
   margin: 2px;
   padding: 2px;
+	height: 26px;
+	width: 36px;
   border: none;
   border-radius: 4px;
-	color: white;
+  background-color: #aaaaaa;
+  color: white;
   font-weight: 900;
   font-size: 18px;
-	background-color: #aaaaaa;
   font-family: Calibri, sans-serif;
 }
 
 .buttons > .card-id {
-  height: 25px;
+  padding-top: 0;
+  height: 56px;
   border-radius: 4px;
   color: white;
-	font-size: 20px;
-	cursor: move;
-	padding-top: 0px;
-}
-
-.buttons > .button-position, .buttons > .button-type {
-	color: transparent;
+  font-size: 20px;
+  cursor: move;
 }
 
 .buttons > .button-add {
@@ -173,12 +212,22 @@ a, a:visited {
   background-color: #de3a3a;
 }
 
+.buttons > button.button-img {
+	color: transparent;
+	padding: 0;
+}
+
+.buttons > .button-img > img {
+	width: 100%;
+	height: 100%;
+}
+
 .text {
-  margin: auto 4px;
+  margin: 4px 4px;
   padding: 4px;
   max-height: 30vh;
   width: 34vw;
-  height: 48px;
+  height: 52px;
   border: none;
   border-radius: 4px;
   background-color: #c0c0c0;
