@@ -219,7 +219,7 @@ function updateFrames() {
 		let pos = +cards[i].pos.split('-')[1];
 		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}"><div class="content">${render(cards[i].text)}</div></div>`)
 		$('#viewer > .frame').eq(i).addClass(cards[i].pos);
-		
+
 		// $('#list > .card').eq(i).find('.card-id')
 		// .attr('class', 'card-id ' + colors[i % colors.length]);
 	}
@@ -229,10 +229,15 @@ function updateFrames() {
 		if ($(this).find('.content > p.has-image').length) {
 			$(this).addClass('has-image');
 			$(this).append('<div class="image"></div>');
-			$(this).find('.content > p.has-image').each(function(){
+			$(this).find('.content > p.has-image').each(function () {
 				let image = $(this).parent().parent().find('.image');
 				$(this).detach().appendTo(image);
 			});
+		}
+		let maxlines = Math.round(vh / lineHeight(this));
+		let lines = getLines($(this).find('.content'));
+		if (lines > maxlines) {
+			$(this).css('font-size', `${36*(maxlines/ lines)}px`);
 		}
 	});
 	if (theme) {
@@ -267,4 +272,14 @@ function testPermission() {
 			console.log('NoPerms');
 			alert('Please allow clipboard permissions');
 		});
+}
+
+function getLines(elem) {
+	let divheight = $(elem).actual('height');
+	let lineheight = lineHeight(elem);
+	return Math.round(divheight / +lineheight);
+}
+
+function lineHeight(elem) {
+	return Math.floor(parseInt($(elem).css('font-size').replace('px','')) * 1.5);
 }
