@@ -136,7 +136,6 @@ function calcListeners() {
 
 	$('.text').off('keyup');
 	$('.text').on('keyup', function () {
-		console.log('keyup');
 		$(this).css('height', '44px');
 		$(this).css('height', $(this)[0].scrollHeight + 'px');
 		calcCards();
@@ -238,9 +237,8 @@ function updateFrames() {
 		let maxlines = Math.round(vh / lineHeight(this));
 		let lines = getLines($(this).find('.content'));
 		if ($(this).is('.pos-2.has-image, .pos-6.has-image')) lines += getLines($(this).find('.image'));
-		console.log(lines, $(this).is('.pos-2.has-image, .pos-6.has-image'));
 		if (lines > maxlines) {
-			$(this).css('font-size', `${42*(maxlines / lines)}px`);
+			$(this).css('font-size', `${36*(maxlines / lines)}px`);
 		}
 	});
 	if (theme) {
