@@ -37,11 +37,19 @@ $(document).ready(function () {
 			}
 			navigator.clipboard.readText()
 				.then(text => {
-					cards = text.split('\n').map(el => {
-						return {
-							text: el
-						};
-					});
+					if (text.match('%slide%').length) {
+						cards = text.split('\n%%slide%\n').map(el => {
+							return {
+								text: el
+							};
+						});
+					} else {
+						cards = text.split('\n').map(el => {
+							return {
+								text: el
+							};
+						});
+					}
 					fromCards();
 				})
 				.catch(err => {
@@ -52,7 +60,7 @@ $(document).ready(function () {
 			if (!clipboardPerms) {
 				testPermission();
 			}
-			navigator.clipboard.writeText(cards.map(el => el.text).join('\n'))
+			navigator.clipboard.writeText(cards.map(el => el.text).join('\n%slide%\n'))
 				.catch(err => {
 					alert('Error copying item<br>' + err);
 				});
