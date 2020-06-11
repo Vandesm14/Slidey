@@ -51,15 +51,8 @@ $(document).ready(function () {
 		} else if (e.key === 'F2' && !viewMode) {
 			$('.transfer > .upload').click();
 		} else if (e.key === 'F3' && !viewMode) {
-			e.preventDefault();
-			if (!clipboardPerms) {
-				testPermission();
-			}
-			navigator.clipboard.writeText('%slidey%' + JSON.stringify(cards))
-				.catch(err => {
-					alert('Error copying item');
-					console.error(err);
-				});
+			let file = new Blob([JSON.stringify(cards)], {type: 'text/plain;charset=utf-8'});
+			saveAs(file, 'untitled.slidey');
 		}
 	});
 
