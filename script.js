@@ -1,4 +1,3 @@
-// TODO: Replace with .bind
 const render = (text) => {
 	return markdownit({
 		breaks: true
@@ -17,6 +16,7 @@ var slideBack = ['ArrowDown', 'ArrowLeft', 'Backspace'];
 var slideForward = ['ArrowUp', 'ArrowRight', ' ', 'Enter'];
 
 var vw = $(window).width();
+var vh = $(window).height();
 var clipboardPerms = false;
 
 $(document).ready(function () {
@@ -25,7 +25,7 @@ $(document).ready(function () {
 	$(document).on('keydown', function (e) {
 		if (e.key === 'Escape') {
 			viewMode = !viewMode;
-			view();
+			switchView();
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
 			theme = (theme + 1) % 3;
@@ -52,9 +52,6 @@ $(document).ready(function () {
 				testPermission();
 			}
 			navigator.clipboard.writeText(cards.map(el => el.text).join('\n'))
-				.then(() => {
-					// alert('Item Copied!');
-				})
 				.catch(err => {
 					alert('Error copying item<br>' + err);
 				});
@@ -75,14 +72,14 @@ $(document).ready(function () {
 				step = true;
 				slide = cards.length - 1;
 			}
-			setView(step);
+			setFrame(step);
 		}
 	});
 
 	$(document).on('click', function () {
 		if (viewMode) {
 			slide = slide + 1 >= cards.length ? cards.length - 1 : slide + 1;
-			setView();
+			setFrame();
 		}
 	});
 
@@ -90,13 +87,13 @@ $(document).ready(function () {
 		if (viewMode) {
 			e.preventDefault();
 			slide = slide - 1 < 0 ? 0 : slide - 1;
-			setView();
+			setFrame();
 		}
 	});
 
 	$(window).on('resize', function () {
 		vw = $(window).width();
-		setView();
+		setFrame();
 	});
 });
 
@@ -104,7 +101,6 @@ function updateCards() {
 	if ($('#list').children().length === 0) {
 		let template = $('#cardTemplate').html();
 		$('#list').append(template);
-		$('#viewer').html('<p class="frame" style="background-color:white;color:black">No slides</p>');
 	}
 	$('#list > .card').each(function () {
 		$(this).find('.card-id').text($(this).index() + 1);
@@ -120,17 +116,9 @@ function calcListeners() {
 	$('.card-id').on('click', function (e) {
 		e.stopPropagation();
 		slide = $(this).closest('.card').index();
-		setView(true);
+		setFrame(true);
 		viewMode = true;
-		view();
-	});
-
-	$('.button-position').off('click');
-	$('.button-position').on('click', function () {
-		let img = $(this).find('img');
-		let pos = img.attr('src');
-		img.attr('src', `icons/pos-${(pos.match(/[0-9]+/)[0]+1) % 9}.png`);
-		updateCards();
+		switchView();
 	});
 
 	$('.button-add').off('click');
@@ -148,12 +136,12 @@ function calcListeners() {
 
 	$('.text').off('keyup');
 	$('.text').on('keyup', function () {
+		console.log('keyup');
 		$(this).css('height', '44px');
 		$(this).css('height', $(this)[0].scrollHeight + 'px');
 		calcCards();
 		updateFrames();
 	});
-
 	$('.text').off('keydown');
 	$('.text').on('keydown', function (e) {
 		if (e.key === 'Enter' && e.shiftKey) {
@@ -164,6 +152,14 @@ function calcListeners() {
 			updateCards();
 		}
 	});
+
+	$('.button-position').off('click');
+	$('.button-position').on('click', function () {
+		let img = $(this).find('img');
+		let pos = img.attr('src');
+		img.attr('src', `icons/pos-${(pos.match(/[0-9]+/)[0]+1) % 9}.png`);
+		updateCards();
+	});
 }
 
 function calcCards() {
@@ -171,7 +167,7 @@ function calcCards() {
 	$('.card').each(function (el) {
 		cards.push({
 			text: $(this).find('.text').val(),
-			pos: $(this).find('.button-position > img').attr('src').match(/[0-9]+/)[0]
+			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
 		});
 	});
 	updateFrames();
@@ -188,7 +184,7 @@ function fromCards() {
 	updateFrames();
 }
 
-function view() {
+function switchView() {
 	if (viewMode) {
 		$('#viewer').show();
 		$('#editor').hide();
@@ -203,7 +199,7 @@ function view() {
 	}
 }
 
-function setView(override = false) {
+function setFrame(override = false) {
 	if (override || theme) {
 		$('#viewer').stop(true, true);
 		$('#viewer').css('margin-left', -vw * slide);
@@ -220,16 +216,25 @@ function setView(override = false) {
 function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
-		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}">${render(cards[i].text)}</div>`)
-		$('#viewer > .frame').eq(i).addClass(
-			$('#list > .card').eq(i).find('.button-position > img')
-			.attr('src').match(/pos-[0-9]+/)[0]);
-
-		$('#list > .card').eq(i).find('.card-id')
-		.attr('class', 'card-id ' + colors[i % colors.length]);
+		let pos = +cards[i].pos.split('-')[1];
+		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}"><div class="content">${render(cards[i].text)}</div></div>`)
+		$('#viewer > .frame').eq(i).addClass(cards[i].pos);
+		
+		// $('#list > .card').eq(i).find('.card-id')
+		// .attr('class', 'card-id ' + colors[i % colors.length]);
 	}
-	$('.image-only').removeClass('.image-only');
-	$('#viewer > .frame > p:only-child > img:only-child').parent().addClass('image-only');
+	$('#viewer > .frame > .content > p:only-child > img:only-child').parent().addClass('image-only');
+	$('#viewer > .frame > .content > p > img:only-child').parent().addClass('has-image');
+	$('#viewer > .frame').each(function () {
+		if ($(this).find('.content > p.has-image').length) {
+			$(this).addClass('has-image');
+			$(this).append('<div class="image"></div>');
+			$(this).find('.content > p.has-image').each(function(){
+				let image = $(this).parent().parent().find('.image');
+				$(this).detach().appendTo(image);
+			});
+		}
+	});
 	if (theme) {
 		for (let color of colors) {
 			$(`.frame.${color}`).removeClass(color);

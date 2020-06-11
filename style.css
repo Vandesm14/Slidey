@@ -81,7 +81,7 @@ a, a:visited {
 .viewer > .frame {
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   margin: auto;
   padding: 0 2vw;
@@ -89,49 +89,111 @@ a, a:visited {
   height: 100%;
   color: white;
   text-align: center;
-  font-size: 36px;
+	font-size: 36px;
 
   user-select: none;
 }
-.viewer > .frame.pos-1 { /* Top Left */
-	justify-content: start;
-	align-items: start;
-	text-align: left;
-}
-.viewer > .frame.pos-2 { /* Top Middle */
-	justify-content: start;
-	align-items: center;
-}
-.viewer > .frame.pos-3 { /* Top Right */
-	justify-content: start;
-	align-items: end;
-	text-align: right;
-}
-.viewer > .frame.pos-4 { /* Middle Right */
-	align-items: end;
-	text-align: right;
-}
-.viewer > .frame.pos-5 { /* Bottom Right */
-	justify-content: end;
-	align-items: end;
-	text-align: right;
-}
-.viewer > .frame.pos-6 { /* Bottom Middle */
-	justify-content: end;
-}
-.viewer > .frame.pos-7 { /* Bottom Left */
-	justify-content: end;
-	align-items: start;
-	text-align: left;
-}
-.viewer > .frame.pos-8 { /* Middle Left */
-	align-items: start;
-	text-align: left;
+.viewer.invert > .frame {
+	color: black;
 }
 
-.viewer.invert > .frame > * {
-  color: black;
+/* Top Left */
+.viewer > .frame.pos-1 {
+  align-items: start;
+  justify-content: start;
+  text-align: left;
 }
+/* Top Middle */
+.viewer > .frame.pos-2 {
+  align-items: start;
+  justify-content: center;
+}
+/* Top Right */
+.viewer > .frame.pos-3 {
+  align-items: start;
+  justify-content: end;
+  text-align: right;
+}
+/* Middle Right */
+.viewer > .frame.pos-4 {
+  align-items: right;
+  justify-content: end;
+}
+/* Bottom Right */
+.viewer > .frame.pos-5 {
+  align-items: end;
+  justify-content: end;
+  text-align: right;
+}
+/* Bottom Middle */
+.viewer > .frame.pos-6 {
+  align-items: end;
+  justify-content: center;
+}
+/* Bottom Left */
+.viewer > .frame.pos-7 {
+  align-items: end;
+  justify-content: start;
+  text-align: left;
+}
+/* Middle Left */
+.viewer > .frame.pos-8 {
+  align-items: center;
+  justify-content: left;
+  text-align: left;
+}
+
+.viewer > .frame.has-image:not(.pos-0) {
+  justify-content: space-between;
+}
+
+/* Top Middle */
+.viewer > .frame.has-image.pos-2 {
+  align-items: center;
+  flex-direction: column;
+}
+/* Top Right */
+.viewer > .frame.has-image.pos-3 {
+  flex-direction: row-reverse;
+}
+/* Middle Right */
+.viewer > .frame.has-image.pos-4 {
+  align-items: center;
+  flex-direction: row-reverse;
+}
+/* Bottom Right */
+.viewer > .frame.has-image.pos-5 {
+  flex-direction: row-reverse;
+}
+/* Bottom Middle */
+.viewer > .frame.has-image.pos-6 {
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.viewer > .frame > * {
+	word-wrap: break-word;
+	max-width: 96vw;
+}
+.viewer > .frame.has-image > * {
+	word-wrap: break-word;
+	max-width: 50vw;
+}
+
+.viewer > .frame > .content {
+  display: flex;
+  flex-direction: column;
+}
+
+.viewer > .frame > .image {
+  display: flex;
+  flex-direction: column;
+  padding: 1vw;
+}
+.viewer > .frame.pos-0 > .image {
+  margin-left: 100px;
+}
+
 .viewer > .frame > * {
   opacity: 0;
   transition: opacity 300ms ease-out;
@@ -140,16 +202,16 @@ a, a:visited {
   opacity: 1;
 }
 
-.viewer > .frame > p {
+.viewer > .frame > .content > p {
   margin: 0.6em 0;
 }
 
-.viewer > .frame > p.image-only {
+.viewer > .frame > .content > p.image-only {
   width: 90%;
   height: 90%;
 }
 
-.viewer > .frame > p.image-only > img {
+.viewer > .frame > .content > p.image-only > img {
   width: 100%;
   height: 100%;
 
@@ -184,8 +246,8 @@ a, a:visited {
 .buttons > button {
   margin: 2px;
   padding: 2px;
-	height: 26px;
-	width: 36px;
+  width: 36px;
+  height: 26px;
   border: none;
   border-radius: 4px;
   background-color: #aaaaaa;
@@ -213,13 +275,13 @@ a, a:visited {
 }
 
 .buttons > button.button-img {
-	color: transparent;
-	padding: 0;
+  padding: 0;
+  color: transparent;
 }
 
 .buttons > .button-img > img {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .text {
