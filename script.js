@@ -37,32 +37,32 @@ $(document).ready(function () {
 			}
 			navigator.clipboard.readText()
 				.then(text => {
-					if (text.match('%slide%').length) {
-						cards = text.split('\n%%slide%\n').map(el => {
-							return {
-								text: el
-							};
-						});
+					if (text.startsWith('%slidey%')) {
+						cards = JSON.parse(text.substr(8));
 					} else {
 						cards = text.split('\n').map(el => {
 							return {
-								text: el
+								text: el,
+								pos: 'pos-0'
 							};
 						});
 					}
+					console.log(cards);
 					fromCards();
 				})
 				.catch(err => {
 					alert('Error pasting item');
+					console.error(err);
 				});
 		} else if (e.key === 'F3' && !viewMode) {
 			e.preventDefault();
 			if (!clipboardPerms) {
 				testPermission();
 			}
-			navigator.clipboard.writeText(cards.map(el => el.text).join('\n%slide%\n'))
+			navigator.clipboard.writeText('%slidey%' + JSON.stringify(cards))
 				.catch(err => {
-					alert('Error copying item<br>' + err);
+					alert('Error copying item');
+					console.error(err);
 				});
 		}
 	});
@@ -115,8 +115,13 @@ function updateCards() {
 		let template = $('#cardTemplate').html();
 		$('#list').append(template);
 	}
-	$('#list > .card').each(function () {
+	$('#list > .card').each(function (el) {
 		$(this).find('.card-id').text($(this).index() + 1);
+		$(this).find('.text').addClass($(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]);
+	});
+	$('.text').css('height', '44px');
+	$('.text').each(function () {
+		$(this).css('height', $(this)[0].scrollHeight + 'px');
 	});
 	calcListeners();
 	calcCards();
@@ -191,6 +196,7 @@ function fromCards() {
 		let template = $('#cardTemplate').html();
 		$('#list').append(template);
 		$('.card:last-child').find('.text').val(card.text);
+		$('.card:last-child').find('.button-position > img').attr('src', `icons/${card.pos}.png`);
 	}
 	updateCards();
 	// updateFrames();
