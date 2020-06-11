@@ -11,6 +11,7 @@ var colors = ['red', 'orange', 'green', 'cyan', 'blue', 'purple'];
 var theme = 0;
 var viewMode = false;
 var slide = 0;
+var lastSlide = -1;
 var slideKeys = '';
 
 var slideBack = ['ArrowDown', 'ArrowLeft', 'Backspace'];
@@ -23,37 +24,32 @@ var clipboardPerms = false;
 $(document).ready(function () {
 	updateCards();
 
+	$('.transfer > .upload').on('change', function (e) {
+		let file = e.target.files[0];
+		let reader = new FileReader();
+		console.log(file);
+		reader.readAsText(file)
+		reader.addEventListener('load', (e) => {
+			let text = e.target.result;
+			if (text) {
+				cards = JSON.parse(text);
+			}
+			fromCards();
+		});
+	});
+
 	$(document).on('keydown', function (e) {
 		if (e.key === 'Escape') {
 			viewMode = !viewMode;
 			switchView();
+			setFrame(true);
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
 			theme = (theme + 1) % 3;
 			updateFrames();
+			setFrame(true);
 		} else if (e.key === 'F2' && !viewMode) {
-			if (!clipboardPerms) {
-				testPermission();
-			}
-			navigator.clipboard.readText()
-				.then(text => {
-					if (text.startsWith('%slidey%')) {
-						cards = JSON.parse(text.substr(8));
-					} else {
-						cards = text.split('\n').map(el => {
-							return {
-								text: el,
-								pos: 'pos-0'
-							};
-						});
-					}
-					console.log(cards);
-					fromCards();
-				})
-				.catch(err => {
-					alert('Error pasting item');
-					console.error(err);
-				});
+			$('.transfer > .upload').click();
 		} else if (e.key === 'F3' && !viewMode) {
 			e.preventDefault();
 			if (!clipboardPerms) {
@@ -225,17 +221,23 @@ function setFrame(override = false) {
 		override = true;
 		slideKeys = '';
 	}
+	if (lastSlide === slide && !override) return;
 	if (override || theme) {
 		$('#viewer').stop(true, true);
-		$('#viewer').css('margin-left', -vw * slide);
+		$('.show').removeClass('show');
+		setTimeout(function () {
+			$('#viewer').css('margin-left', -vw * slide);
+			$('.viewer > .frame').eq(slide).addClass('show');
+		}, 200);
 	} else {
 		$('#viewer').stop(true, true);
 		$('#viewer').animate({
 			marginLeft: -vw * slide
 		}, 300);
+		$('.show').removeClass('show');
+		$('.viewer > .frame').eq(slide).addClass('show');
 	}
-	$('.show').removeClass('show');
-	$('.viewer > .frame').eq(slide).addClass('show');
+	lastSlide = slide;
 }
 
 function updateFrames() {

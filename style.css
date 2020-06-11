@@ -183,7 +183,7 @@ a, a:visited {
 
 .viewer > .frame > * {
   opacity: 0;
-  transition: opacity 300ms ease-out;
+  transition: opacity 200ms linear;
 }
 .viewer > .frame.show > * {
   opacity: 1;

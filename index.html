@@ -19,6 +19,9 @@
 				<p>Press <b>Shift+Enter</b> to add a card below (in edit mode)</p>
 				<p id="info-total"></p>
 			</div>
+			<div style="display:none" class="transfer">
+				<input type="file" class="upload" accept=".slidey, .json">
+			</div>
 			<div class="list" id="list"></div>
 		</div>
 		<div class="viewer" id="viewer" style="display:none">
@@ -28,25 +31,26 @@
 	<template id="cardTemplate">
 		<div class="card">
 			<div class="buttons">
-				<button class="card-id">{{id}}</button>
+				<button class="card-id" title="drag">{{id}}</button>
 			</div>
 			<div class="buttons">
-				<button class="button-remove">x</button>
-				<button class="button-add">+</button>
+				<button class="button-remove" title="remove">x</button>
+				<button class="button-add" title="add">+</button>
 			</div>
 			<textarea class="text"></textarea>
 			<div class="buttons">
-				<button class="button-position button-img"><img src="icons/pos-0.png"></button>
+				<button class="button-position button-img" title="position"><img src="icons/pos-0.png"></button>
 				<button class="button-type button-img">_</button>
 			</div>
 		</div>
 	</template>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.2/jquery.scrollTo.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/dreamerslab/jquery.actual/jquery.actual.min.js"></script>
+	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/11.0.0/markdown-it.min.js"></script>
+	
 	<script src="script.js"></script>
 </body>
 
