@@ -11,18 +11,40 @@
 <body>
 	<div class="app">
 		<div class="editor" id="editor">
-			<div class="editor-info">
-				<p>Press <b>ESC</b> to switch modes (edit/view)</p>
-				<p>Press <b>Tab</b> to switch theme (in view mode)</p>
-				<p>Press <b>F2</b> to upload (in edit mode)</p>
-				<p>Press <b>F3</b> to download (in edit mode)</p>
-				<p>Press <b>Shift+Enter</b> to add a card below (in edit mode)</p>
-				<p id="info-total"></p>
+			<div class="header">
+				<div class="group">
+					<button class="button-side"><img src="icons/bars.png"></button>
+				</div>
+				<div class="group">
+					<button class="button-upload">Upload</button>
+					<button class="button-download">Download</button>
+				</div>
+				<div class="group">
+					<button class="button-view" title="view"><img src="icons/eye.png"></button>
+					<button class="button-theme" title="theme">Colors</button>
+				</div>
+				<div class="group">
+					<button class="button-clearAll">Clear ALL</button>
+					<button class="button-clearempty">Clear Empty</button>
+				</div>
 			</div>
-			<div style="display:none" class="transfer">
-				<input type="file" class="upload" accept=".slidey, .json">
+			<div class="row">
+				<div class="side">
+					
+				</div>
+				<div class="col">
+					<div class="editor-info">
+						<p>Press <b>ESC</b> to switch modes (edit/view)</p>
+						<p>Press <b>Tab</b> to switch theme (in view mode)</p>
+						<p>Press <b>Shift+Enter</b> to add a card below (in edit mode)</p>
+						<p id="info-total"></p>
+					</div>
+					<div style="display:none" class="transfer">
+						<input type="file" class="upload" accept=".slidey, .json">
+					</div>
+					<div class="list" id="list"></div>
+				</div>
 			</div>
-			<div class="list" id="list"></div>
 		</div>
 		<div class="viewer" id="viewer" style="display:none">
 			<p class="frame" style="background-color:white;color:black">No slides</p>
@@ -51,7 +73,7 @@
 	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/11.0.0/markdown-it.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js/dist/FileSaver.min.js"></script>
-	
+
 	<script src="script.js"></script>
 </body>
 

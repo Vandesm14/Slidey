@@ -47,6 +47,16 @@ a, a:visited {
   background-color: #9540bc !important;
 }
 
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 /* ----------App---------- */
 .editor {
   display: flex;
@@ -54,7 +64,77 @@ a, a:visited {
   flex-direction: column;
   margin: 0 auto;
   width: 100%;
+  height: 100%;
   text-align: center;
+}
+
+.editor > .header {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border-bottom: 1px solid #464646;
+  background: linear-gradient(0deg, hsl(110, 0%, 60%) 0%, hsl(110, 0%, 70%) 100%);
+  box-shadow: 0 -1px 10px #000000cc;
+}
+
+.editor > .header button {
+  padding: 6px 10px;
+  height: 34px;
+  border: none;
+  border-right: 2px solid #464646;
+  background-color: transparent;
+  color: black;
+  font-weight: 900;
+  font-size: 18px;
+  font-family: Calibri, sans-serif;
+  transition: background-color 100ms ease-out, transform 100ms ease-out;
+}
+.editor > .header button:hover {
+  background-color: #00000044;
+  transform: translateY(-1px);
+}
+
+.editor > .header > .group {
+	display: flex;
+	flex-direction: row;
+  border-right: 2px solid #242424;
+}
+
+.editor > .header button > img {
+  margin: auto;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.editor > .row {
+  margin-top: 34px;
+  height: 100%;
+}
+
+.editor > .row > .side {
+  position: absolute;
+  top: 34px;
+  left: -20vw;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  height: calc(100vh - 34px);
+  background-color: #eeeeee;
+  transition: left 150ms ease-out;
+}
+.editor > .row > .side.open {
+  left: 0;
+}
+
+.editor > .row > .col {
+  width: 100%;
+  transition: margin-left 200ms ease-out;
+}
+.editor > .row > .col.open {
+  margin-left: 20vw;
 }
 
 .viewer {
@@ -89,12 +169,12 @@ a, a:visited {
   height: 100%;
   color: white;
   text-align: center;
-	font-size: 36px;
+  font-size: 36px;
 
   user-select: none;
 }
 .viewer.invert > .frame {
-	color: black;
+  color: black;
 }
 
 /* Top Left */
@@ -173,12 +253,12 @@ a, a:visited {
 }
 
 .viewer > .frame > * {
-	word-wrap: break-word;
-	max-width: 96vw;
+  max-width: 96vw;
+  word-wrap: break-word;
 }
 .viewer > .frame.has-image > * {
-	word-wrap: break-word;
-	max-width: 50vw;
+  max-width: 50vw;
+  word-wrap: break-word;
 }
 
 .viewer > .frame > * {
@@ -220,8 +300,8 @@ a, a:visited {
 }
 
 .viewer > .frame > .image > p.has-image > img {
-	max-width: 100%;
-	max-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .list {
@@ -302,8 +382,8 @@ a, a:visited {
   text-align: center;
 }
 .text.pos-1, .text.pos-7, .text.pos-8 {
-	text-align: left;
+  text-align: left;
 }
 .text.pos-3, .text.pos-4, .text.pos-5 {
-	text-align: right;
+  text-align: right;
 }

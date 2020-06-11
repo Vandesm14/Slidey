@@ -19,7 +19,6 @@ var slideForward = ['ArrowUp', 'ArrowRight', ' ', 'Enter'];
 
 var vw = $(window).width();
 var vh = $(window).height();
-var clipboardPerms = false;
 
 $(document).ready(function () {
 	updateCards();
@@ -27,8 +26,7 @@ $(document).ready(function () {
 	$('.transfer > .upload').on('change', function (e) {
 		let file = e.target.files[0];
 		let reader = new FileReader();
-		console.log(file);
-		reader.readAsText(file)
+		reader.readAsText(file);
 		reader.addEventListener('load', (e) => {
 			let text = e.target.result;
 			if (text) {
@@ -38,7 +36,35 @@ $(document).ready(function () {
 		});
 	});
 
-	$(document).on('keydown', function (e) {
+	$('.header .button-side').on('click', function (e) {
+		$('.side').toggleClass('open');
+		$('.editor > .row > .col').toggleClass('open');
+	});
+	$('.header .button-upload').on('click', function (e) {
+		$('.transfer > .upload').click();
+	});
+	$('.header .button-download').on('click', function (e) {
+		let file = new Blob([JSON.stringify(cards)], {
+			type: 'text/plain;charset=utf-8'
+		});
+		saveAs(file, 'untitled.slidey');
+	});
+	$('.header .button-view').on('click', function (e) {
+		e.stopPropagation();
+		viewMode = !viewMode;
+		slide = 0;
+		setFrame(true);
+		switchView();
+	});
+	$('.header .button-theme').on('click', function (e) {
+		e.preventDefault();
+		theme = (theme + 1) % 3;
+		$(this).text(['Colors', 'White', 'Black'][theme]);
+		updateFrames();
+		setFrame(true);
+	});
+
+	$(document).on('keydown', function (e) { // Global functions
 		if (e.key === 'Escape') {
 			viewMode = !viewMode;
 			switchView();
@@ -48,15 +74,10 @@ $(document).ready(function () {
 			theme = (theme + 1) % 3;
 			updateFrames();
 			setFrame(true);
-		} else if (e.key === 'F2' && !viewMode) {
-			$('.transfer > .upload').click();
-		} else if (e.key === 'F3' && !viewMode) {
-			let file = new Blob([JSON.stringify(cards)], {type: 'text/plain;charset=utf-8'});
-			saveAs(file, 'untitled.slidey');
 		}
 	});
 
-	$(document).on('keydown', function (e) {
+	$(document).on('keydown', function (e) { // View-sepecific functions
 		let step = false;
 		if (viewMode) {
 			if (slideBack.includes(e.key)) {
@@ -146,7 +167,6 @@ function calcListeners() {
 		$(this).css('height', '44px');
 		$(this).css('height', $(this)[0].scrollHeight + 'px');
 		calcCards();
-		// updateFrames();
 	});
 	$('.text').off('keydown');
 	$('.text').on('keydown', function (e) {
@@ -176,7 +196,6 @@ function calcCards() {
 			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
 		});
 	});
-	// updateFrames();
 }
 
 function fromCards() {
@@ -188,7 +207,6 @@ function fromCards() {
 		$('.card:last-child').find('.button-position > img').attr('src', `icons/${card.pos}.png`);
 	}
 	updateCards();
-	// updateFrames();
 }
 
 function switchView() {
@@ -213,6 +231,7 @@ function setFrame(override = false) {
 		slide = +slideKeys - 1;
 		override = true;
 		slideKeys = '';
+		if (+slideKeys === lastSlide) return;
 	}
 	if (lastSlide === slide && !override) return;
 	if (override || theme) {
@@ -281,18 +300,6 @@ function createSortable(el) {
 		// filter: '.text',
 		onEnd: updateCards
 	});
-}
-
-function testPermission() {
-	navigator.clipboard.readText()
-		.then(text => {
-			clipboardPerms = true;
-			console.log('HasPerms');
-		})
-		.catch(() => {
-			console.log('NoPerms');
-			alert('Please allow clipboard permissions');
-		});
 }
 
 function getLines(elem) {
