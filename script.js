@@ -218,7 +218,7 @@ function updateFrames() {
 	$('#viewer').empty();
 	for (let i in cards) {
 		let pos = +cards[i].pos.split('-')[1];
-		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}"><div class="content">${render(cards[i].text)}</div></div>`)
+		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}"><div class="content">${render(cards[i].text)}</div></div>`);
 		$('#viewer > .frame').eq(i).addClass(cards[i].pos);
 
 		// $('#list > .card').eq(i).find('.card-id')
@@ -237,8 +237,10 @@ function updateFrames() {
 		}
 		let maxlines = Math.round(vh / lineHeight(this));
 		let lines = getLines($(this).find('.content'));
+		if ($(this).is('.pos-2.has-image, .pos-6.has-image')) lines += getLines($(this).find('.image'));
+		console.log(lines, $(this).is('.pos-2.has-image, .pos-6.has-image'));
 		if (lines > maxlines) {
-			$(this).css('font-size', `${36*(maxlines / lines)}px`);
+			$(this).css('font-size', `${42*(maxlines / lines)}px`);
 		}
 	});
 	if (theme) {
