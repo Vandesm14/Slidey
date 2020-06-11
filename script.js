@@ -11,6 +11,7 @@ var colors = ['red', 'orange', 'green', 'cyan', 'blue', 'purple'];
 var theme = 0;
 var viewMode = false;
 var slide = 0;
+var slideKeys = '';
 
 var slideBack = ['ArrowDown', 'ArrowLeft', 'Backspace'];
 var slideForward = ['ArrowUp', 'ArrowRight', ' ', 'Enter'];
@@ -71,6 +72,10 @@ $(document).ready(function () {
 			} else if (e.key === 'End') {
 				step = true;
 				slide = cards.length - 1;
+			} else if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].includes(e.key)) {
+				slideKeys += e.key;
+				if (+slideKeys > cards.length) slideKeys = '' + cards.length;
+				return;
 			}
 			setFrame(step);
 		}
@@ -139,7 +144,7 @@ function calcListeners() {
 		$(this).css('height', '44px');
 		$(this).css('height', $(this)[0].scrollHeight + 'px');
 		calcCards();
-		updateFrames();
+		// updateFrames();
 	});
 	$('.text').off('keydown');
 	$('.text').on('keydown', function (e) {
@@ -169,7 +174,7 @@ function calcCards() {
 			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
 		});
 	});
-	updateFrames();
+	// updateFrames();
 }
 
 function fromCards() {
@@ -180,7 +185,7 @@ function fromCards() {
 		$('.card:last-child').find('.text').val(card.text);
 	}
 	updateCards();
-	updateFrames();
+	// updateFrames();
 }
 
 function switchView() {
@@ -200,6 +205,12 @@ function switchView() {
 }
 
 function setFrame(override = false) {
+	if (slideKeys) {
+		if (+slideKeys === 0) slideKeys = '1';
+		slide = +slideKeys - 1;
+		override = true;
+		slideKeys = '';
+	}
 	if (override || theme) {
 		$('#viewer').stop(true, true);
 		$('#viewer').css('margin-left', -vw * slide);
@@ -282,5 +293,5 @@ function getLines(elem) {
 }
 
 function lineHeight(elem) {
-	return Math.floor(parseInt($(elem).css('font-size').replace('px','')) * 1.5)+10;
+	return Math.floor(parseInt($(elem).css('font-size').replace('px', '')) * 1.5) + 10;
 }

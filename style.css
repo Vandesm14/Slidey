@@ -118,6 +118,7 @@ a, a:visited {
 .viewer > .frame.pos-4 {
   align-items: right;
   justify-content: end;
+  text-align: right;
 }
 /* Bottom Right */
 .viewer > .frame.pos-5 {
@@ -180,6 +181,14 @@ a, a:visited {
 	max-width: 50vw;
 }
 
+.viewer > .frame > * {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+.viewer > .frame.show > * {
+  opacity: 1;
+}
+
 .viewer > .frame > .content {
   display: flex;
   flex-direction: column;
@@ -192,14 +201,6 @@ a, a:visited {
 }
 .viewer > .frame.pos-0 > .image {
   margin-left: 100px;
-}
-
-.viewer > .frame > * {
-  opacity: 0;
-  transition: opacity 300ms ease-out;
-}
-.viewer > .frame.show > * {
-  opacity: 1;
 }
 
 .viewer > .frame > .content > p {
@@ -216,6 +217,11 @@ a, a:visited {
   height: 100%;
 
   object-fit: contain;
+}
+
+.viewer > .frame > .image > p.has-image > img {
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .list {
