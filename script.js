@@ -188,6 +188,7 @@ function switchView() {
 	if (viewMode) {
 		$('#viewer').show();
 		$('#editor').hide();
+		updateFrames();
 	} else {
 		$('#editor').show();
 		if (slide > 1) {
@@ -225,7 +226,7 @@ function updateFrames() {
 	}
 	$('#viewer > .frame > .content > p:only-child > img:only-child').parent().addClass('image-only');
 	$('#viewer > .frame > .content > p > img:only-child').parent().addClass('has-image');
-	$('#viewer > .frame').each(function () {
+	$('#viewer > .frame').each(function (i) {
 		if ($(this).find('.content > p.has-image').length) {
 			$(this).addClass('has-image');
 			$(this).append('<div class="image"></div>');
@@ -237,7 +238,7 @@ function updateFrames() {
 		let maxlines = Math.round(vh / lineHeight(this));
 		let lines = getLines($(this).find('.content'));
 		if (lines > maxlines) {
-			$(this).css('font-size', `${36*(maxlines/ lines)}px`);
+			$(this).css('font-size', `${36*(maxlines / lines)}px`);
 		}
 	});
 	if (theme) {
@@ -277,9 +278,9 @@ function testPermission() {
 function getLines(elem) {
 	let divheight = $(elem).actual('height');
 	let lineheight = lineHeight(elem);
-	return Math.round(divheight / +lineheight);
+	return Math.ceil(divheight / lineheight);
 }
 
 function lineHeight(elem) {
-	return Math.floor(parseInt($(elem).css('font-size').replace('px','')) * 1.5);
+	return Math.floor(parseInt($(elem).css('font-size').replace('px','')) * 1.5)+10;
 }

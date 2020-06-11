@@ -203,7 +203,7 @@ a, a:visited {
 }
 
 .viewer > .frame > .content > p {
-  margin: 0.6em 0;
+  margin: calc(22em/36) 0;
 }
 
 .viewer > .frame > .content > p.image-only {
