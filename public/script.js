@@ -1,4 +1,4 @@
-const socket = io.connect('https://Socketio--vandesm14.repl.co');
+const socket = io();
 const render = (text) => {
 	return markdownit({
 		breaks: true
@@ -13,7 +13,9 @@ if (storedid) {
 	id = uuid4();
 	localStorage.setItem('remoteid', id);
 }
-socket.emit('init', {id});
+socket.emit('init', {
+	id
+});
 
 socket.on('send', function (data) {
 	switch (data.cmd) {
@@ -40,7 +42,10 @@ socket.on('send', function (data) {
 			setFrame(true);
 			break;
 		case 'init':
-			socket.emit('send', {id, str: `${(slide + 1)} of ${cards.length}`});
+			socket.emit('send', {
+				id,
+				str: `${(slide + 1)} of ${cards.length}`
+			});
 	}
 });
 
@@ -79,24 +84,24 @@ $(document).ready(function () {
 		});
 	});
 
-	$('.header .button-side').on('click', function (e) {
+	$('.header .button-side').on('click', function () {
 		$('.side').toggleClass('open');
 		$('.editor > .row > .col').toggleClass('open');
 	});
-	$('.header .button-upload').on('click', function (e) {
+	$('.header .button-upload').on('click', function () {
 		if (cards.some(el => el.text)) {
 			if (!confirm('Overwrite current presentation?')) return;
 		}
 		$('.transfer > .upload').click();
 	});
-	$('.header .button-download').on('click', function (e) {
+	$('.header .button-download').on('click', function () {
 		let file = new Blob([JSON.stringify(cards)], {
 			type: 'text/plain;charset=utf-8'
 		});
 		saveAs(file, 'untitled.slidey');
 	});
 	$('.header .button-remote').on('click', function () {
-		open(`remote.html?id=${id}`);
+		open(`remote?id=${id}`);
 	});
 	$('.header .button-view').on('click', function (e) {
 		e.stopPropagation();
@@ -104,6 +109,7 @@ $(document).ready(function () {
 		slide = 0;
 		setFrame(true);
 		switchView();
+		// document.documentElement.requestFullscreen();
 	});
 	$('.header .button-theme').on('click', function () {
 		theme = (theme + 1) % 3;
@@ -122,11 +128,12 @@ $(document).ready(function () {
 		fromCards();
 	});
 
-	$(document).on('keydown', function (e) { // Global functions
+	$(document)[0].addEventListener('keydown', function (e) { // Global functions
 		if (e.key === 'Escape') {
 			viewMode = !viewMode;
 			switchView();
 			setFrame(true);
+			// document.documentElement.requestFullscreen();
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
 			theme = (theme + 1) % 3;
@@ -177,6 +184,13 @@ $(document).ready(function () {
 		vw = $(window).width();
 		updateFrames();
 		setFrame(true);
+	});
+
+	$(document).on('fullscreenchange', function (e) {
+		if (!document.fullscreenElement && viewMode) {
+			viewMode = false;
+			switchView();
+		}
 	});
 });
 
@@ -257,7 +271,10 @@ function calcCards() {
 			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
 		});
 	});
-	socket.emit('send', {id, str: `${(slide + 1)} of ${cards.length}`});
+	socket.emit('send', {
+		id,
+		str: `${(slide + 1)} of ${cards.length}`
+	});
 }
 
 function fromCards() {
@@ -311,7 +328,10 @@ function setFrame(override = false) {
 		$('.show').removeClass('show');
 		$('.viewer > .frame').eq(slide).addClass('show');
 	}
-	socket.emit('send', {id, str: `${(slide + 1)} of ${cards.length}`});
+	socket.emit('send', {
+		id,
+		str: `${(slide + 1)} of ${cards.length}`
+	});
 	lastSlide = slide;
 }
 
