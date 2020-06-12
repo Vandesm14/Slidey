@@ -1,10 +1,44 @@
+const socket = io.connect('https://Socketio--vandesm14.repl.co');
 const render = (text) => {
 	return markdownit({
 		breaks: true
 	}).render(text);
 };
 
+const id = uuid4();
+socket.emit('init', {id});
+
+socket.on('send', function (data) {
+	switch (data.cmd) {
+		case 'prev':
+			slide = slide - 1 < 0 ? 0 : slide - 1;
+			setFrame();
+			break;
+		case 'next':
+			slide = slide + 1 >= cards.length ? cards.length - 1 : slide + 1;
+			setFrame();
+			break;
+		case 'start':
+			slide = 0;
+			setFrame(true);
+			break;
+		case 'end':
+			slide = cards.length - 1;
+			setFrame(true);
+			break;
+		case 'theme':
+			theme = (theme + 1) % 3;
+			$(this).text(['Colors', 'White', 'Black'][theme]);
+			updateFrames();
+			setFrame(true);
+			break;
+		case 'init':
+			socket.emit('send', {id, str: `${(slide + 1)} of ${cards.length}`});
+	}
+});
+
 var cards = [];
+var groups = [];
 var backgrounds = [];
 var colors = ['red', 'orange', 'green', 'cyan', 'blue', 'purple'];
 
@@ -32,6 +66,8 @@ $(document).ready(function () {
 			if (text) {
 				cards = JSON.parse(text);
 			}
+			let preGroups = cards.map(el => el.group)
+			groups = preGroups.filter((el, i) => preGroups.indexOf(el) === i);
 			fromCards();
 		});
 	});
@@ -41,6 +77,9 @@ $(document).ready(function () {
 		$('.editor > .row > .col').toggleClass('open');
 	});
 	$('.header .button-upload').on('click', function (e) {
+		if (cards.some(el => el.text)) {
+			if (!confirm('Overwrite current presentation?')) return;
+		}
 		$('.transfer > .upload').click();
 	});
 	$('.header .button-download').on('click', function (e) {
@@ -49,6 +88,9 @@ $(document).ready(function () {
 		});
 		saveAs(file, 'untitled.slidey');
 	});
+	$('.header .button-remote').on('click', function () {
+		open(`remote.html?id=${id}`);
+	});
 	$('.header .button-view').on('click', function (e) {
 		e.stopPropagation();
 		viewMode = !viewMode;
@@ -56,12 +98,21 @@ $(document).ready(function () {
 		setFrame(true);
 		switchView();
 	});
-	$('.header .button-theme').on('click', function (e) {
-		e.preventDefault();
+	$('.header .button-theme').on('click', function () {
 		theme = (theme + 1) % 3;
 		$(this).text(['Colors', 'White', 'Black'][theme]);
 		updateFrames();
 		setFrame(true);
+	});
+	$('.header .button-clearAll').on('click', function () {
+		if (!confirm('Clear All Slides?')) return;
+		cards = [];
+		$('#list').empty();
+		updateCards();
+	});
+	$('.header .button-clearEmpty').on('click', function () {
+		cards = cards.filter(el => el.text);
+		fromCards();
 	});
 
 	$(document).on('keydown', function (e) { // Global functions
@@ -72,6 +123,7 @@ $(document).ready(function () {
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
 			theme = (theme + 1) % 3;
+			$('.header .button-theme').text(['Colors', 'White', 'Black'][theme]);
 			updateFrames();
 			setFrame(true);
 		}
@@ -116,7 +168,8 @@ $(document).ready(function () {
 
 	$(window).on('resize', function () {
 		vw = $(window).width();
-		setFrame();
+		updateFrames();
+		setFrame(true);
 	});
 });
 
@@ -127,6 +180,7 @@ function updateCards() {
 	}
 	$('#list > .card').each(function (el) {
 		$(this).find('.card-id').text($(this).index() + 1);
+		$(this).find('.text').attr('class', 'text');
 		$(this).find('.text').addClass($(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]);
 	});
 	$('.text').css('height', '44px');
@@ -196,6 +250,7 @@ function calcCards() {
 			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
 		});
 	});
+	socket.emit('send', {id, str: `${(slide + 1)} of ${cards.length}`});
 }
 
 function fromCards() {
@@ -249,6 +304,7 @@ function setFrame(override = false) {
 		$('.show').removeClass('show');
 		$('.viewer > .frame').eq(slide).addClass('show');
 	}
+	socket.emit('send', {id, str: `${(slide + 1)} of ${cards.length}`});
 	lastSlide = slide;
 }
 
@@ -310,4 +366,14 @@ function getLines(elem) {
 
 function lineHeight(elem) {
 	return Math.floor(parseInt($(elem).css('font-size').replace('px', '')) * 1.5) + 10;
+}
+
+function uuid4() {
+	var dt = new Date().getTime();
+	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = (dt + Math.random() * 16) % 16 | 0;
+		dt = Math.floor(dt / 16);
+		return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+	});
+	return uuid;
 }

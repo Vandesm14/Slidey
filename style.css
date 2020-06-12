@@ -85,20 +85,18 @@ a, a:visited {
   border-right: 2px solid #464646;
   background-color: transparent;
   color: black;
-  font-weight: 900;
   font-size: 18px;
   font-family: Calibri, sans-serif;
   transition: background-color 100ms ease-out, transform 100ms ease-out;
 }
 .editor > .header button:hover {
   background-color: #00000044;
-  transform: translateY(-1px);
 }
 
 .editor > .header > .group {
 	display: flex;
 	flex-direction: row;
-  border-right: 2px solid #242424;
+  /* border-right: 2px solid #242424; */
 }
 
 .editor > .header button > img {
@@ -386,4 +384,17 @@ a, a:visited {
 }
 .text.pos-3, .text.pos-4, .text.pos-5 {
   text-align: right;
+}
+
+/* Dynamic Menu */
+#groups {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	flex-direction: column;
+	width: max-content;
+}
+#groups.active {
+	display: flex;
 }

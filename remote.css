@@ -1,0 +1,52 @@
+html, body, .app {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+	background-color: #dbdbdb;
+  color: black;
+  font-family: Calibri, sans-serif;
+}
+
+div, h1, p {
+  margin: 0;
+  padding: 0;
+}
+
+a, a:visited {
+  color: #0000dd;
+  text-decoration: none;
+}
+
+.app {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+/* ----------App---------- */
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.row > .info {
+	text-align: center;
+	width: 100%;
+	padding: 20px;
+}
+
+.row > button {
+	background-color: #dbdbdb;
+	border: 1px solid black;
+	border-radius: 8px;
+	flex: 1;
+	font-size: 24px;
+	height: 40vh;
+}
+.row > button:active {
+	background-color: #a1a1a1;
+}
