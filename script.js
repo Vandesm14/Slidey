@@ -5,7 +5,14 @@ const render = (text) => {
 	}).render(text);
 };
 
-const id = uuid4();
+var id = '';
+const storedid = localStorage.getItem('remoteid');
+if (storedid) {
+	id = storedid;
+} else {
+	id = uuid4();
+	localStorage.setItem('remoteid', id);
+}
 socket.emit('init', {id});
 
 socket.on('send', function (data) {

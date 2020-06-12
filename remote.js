@@ -1,6 +1,13 @@
 const socket = io.connect('https://Socketio--vandesm14.repl.co');
 
-const id = location.href.match(/\?id=[\w\d]{8}-[\w\d]{4}-[\w\d]{4}-[\w\d]{4}-[\w\d]{12}/)[0].substr(4);
+var id = location.href.match(/\?id=[\w\d]{8}-[\w\d]{4}-[\w\d]{4}-[\w\d]{4}-[\w\d]{12}/);
+const storedid = localStorage.getItem('remoteid');
+if (id && id[0].substr(4) !== storedid) {
+	id = id[0].substr(4);
+	localStorage.setItem('remoteid', id);
+} else if (storedid) {
+	id = storedid;
+}
 socket.emit('init', {id});
 
 socket.on('send', function(data){
