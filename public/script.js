@@ -17,7 +17,7 @@ socket.emit('init', {
 	id
 });
 
-socket.on('send', function (data) {
+socket.on('remote', function (data) {
 	switch (data.cmd) {
 		case 'prev':
 			slide = slide - 1 < 0 ? 0 : slide - 1;
@@ -37,22 +37,35 @@ socket.on('send', function (data) {
 			break;
 		case 'theme':
 			theme = (theme + 1) % 3;
+			version++;
 			$(this).text(['Colors', 'White', 'Black'][theme]);
 			updateFrames();
 			setFrame(true);
 			break;
 		case 'init':
-			socket.emit('send', {
+			socket.emit('info', {
 				id,
 				str: `${(slide + 1)} of ${cards.length}`
 			});
 	}
 });
 
+socket.on('slides', function () {
+	sendFrames();
+});
+
+socket.on('control', function (data) {
+	slide = data.slide;
+	setFrame(true);
+});
+
 var cards = [];
+var tiles = [];
 var groups = [];
-var backgrounds = [];
 var colors = ['red', 'orange', 'green', 'cyan', 'blue', 'purple'];
+
+var version = 0;
+var prevVersion = 0;
 
 var theme = 0;
 var viewMode = false;
@@ -69,7 +82,7 @@ var vh = $(window).height();
 $(document).ready(function () {
 	updateCards();
 
-	$('.transfer > .upload').on('change', function (e) {
+	$('#upload').on('change', function (e) {
 		let file = e.target.files[0];
 		let reader = new FileReader();
 		reader.readAsText(file);
@@ -92,7 +105,7 @@ $(document).ready(function () {
 		if (cards.some(el => el.text)) {
 			if (!confirm('Overwrite current presentation?')) return;
 		}
-		$('.transfer > .upload').click();
+		$('#upload').click();
 	});
 	$('.header .button-download').on('click', function () {
 		let file = new Blob([JSON.stringify(cards)], {
@@ -113,6 +126,7 @@ $(document).ready(function () {
 	});
 	$('.header .button-theme').on('click', function () {
 		theme = (theme + 1) % 3;
+		version++;
 		$(this).text(['Colors', 'White', 'Black'][theme]);
 		updateFrames();
 		setFrame(true);
@@ -137,6 +151,7 @@ $(document).ready(function () {
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
 			theme = (theme + 1) % 3;
+			version++;
 			$('.header .button-theme').text(['Colors', 'White', 'Black'][theme]);
 			updateFrames();
 			setFrame(true);
@@ -182,6 +197,7 @@ $(document).ready(function () {
 
 	$(window).on('resize', function () {
 		vw = $(window).width();
+		version++;
 		updateFrames();
 		setFrame(true);
 	});
@@ -265,13 +281,14 @@ function calcListeners() {
 
 function calcCards() {
 	cards = [];
+	version++;
 	$('.card').each(function (el) {
 		cards.push({
 			text: $(this).find('.text').val(),
 			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
 		});
 	});
-	socket.emit('send', {
+	socket.emit('info', {
 		id,
 		str: `${(slide + 1)} of ${cards.length}`
 	});
@@ -328,7 +345,7 @@ function setFrame(override = false) {
 		$('.show').removeClass('show');
 		$('.viewer > .frame').eq(slide).addClass('show');
 	}
-	socket.emit('send', {
+	socket.emit('info', {
 		id,
 		str: `${(slide + 1)} of ${cards.length}`
 	});
@@ -373,6 +390,7 @@ function updateFrames() {
 	} else {
 		$('#viewer').removeClass('invert');
 	}
+	sendFrames();
 }
 
 function createSortable(el) {
@@ -403,4 +421,50 @@ function uuid4() {
 		return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 	});
 	return uuid;
+}
+
+function arrayEqual(arr1, arr2) {
+	let eq = true;
+	for (let i = 0; i < (arr1.length || arr2.length); i++) {
+		if (arr1[i] !== arr2[i]) eq = false;
+	}
+	return eq;
+}
+
+function sendFrames(override = false) {
+	let cache = version;
+	if (version === prevVersion && !override) {
+		socket.emit('slides', {
+			id,
+			tiles
+		});
+		console.log('sent cache');
+		return;
+	}
+	if (viewMode) {
+		tiles = [];
+		$('.frame > *').css('opacity', '1');
+		setTimeout(function () {
+			$('.frame').each(async function (i) {
+				if (version !== cache) return;
+				let elem = $(this)[0];
+				await html2canvas(elem).then(canvas => {
+					if (version !== cache) return;
+					tiles.push(canvas.toDataURL());
+				});
+				if (i === cards.length - 1) done();
+			});
+
+			function done() {
+				$('.frame > *').css('opacity', '');
+				if (version !== cache) return;
+				socket.emit('slides', {
+					id,
+					tiles
+				});
+				prevVersion = version;
+				console.log('sent');
+			}
+		}, 350);
+	}
 }

@@ -10,21 +10,30 @@
 
 <body>
 	<div class="app">
-		<div class="row">
-			<h1 class="info">Slide 0 of 0</h1>
+		<div class="remote" id="remote">
+			<div class="row">
+				<button class="button-switchView">Switch View</button>
+			</div>
+			<div class="row">
+				<h1 class="info">Slide 0 of 0</h1>
+			</div>
+			<div class="row">
+				<button class="button-prev">Prev</button>
+				<button class="button-next">Next</button>
+			</div>
+			<div class="row">
+				<button class="button-start">Start</button>
+				<button class="button-theme">Theme</button>
+				<button class="button-end">End</button>
+			</div>
 		</div>
-		<div class="row">
-			<button class="button-prev">Prev</button>
-			<button class="button-next">Next</button>
-		</div>
-		<div class="row">
-			<button class="button-start">Start</button>
-			<button class="button-theme">Theme</button>
-			<button class="button-end">End</button>
+		<div class="gallery" id="gallery" style="display:none">
+			<div class="header"></div>
+			<div class="list" id="list"></div>
 		</div>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="http://socketio--vandesm14.repl.co/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 
 	<script src="remote.js"></script>
 </body>

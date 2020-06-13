@@ -18,6 +18,7 @@
 				<div class="group">
 					<button class="button-upload">Upload</button>
 					<button class="button-download">Download</button>
+					<input type="file" id="upload" accept=".slidey, .json" style="display:none">
 				</div>
 				<div class="group">
 					<button class="button-remote" title="remote"><img src="icons/remote.png"></button>
@@ -39,9 +40,6 @@
 						<p>Press <b>Tab</b> to switch theme (in view mode)</p>
 						<p>Press <b>Shift+Enter</b> to add a card below (in edit mode)</p>
 						<p id="info-total"></p>
-					</div>
-					<div style="display:none" class="transfer">
-						<input type="file" class="upload" accept=".slidey, .json">
 					</div>
 					<div class="list" id="list"></div>
 				</div>
@@ -74,7 +72,8 @@
 	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/11.0.0/markdown-it.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js/dist/FileSaver.min.js"></script>
-	<script src="https://socketio--vandesm14.repl.co/socket.io/socket.io.js"></script>
+	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 
 	<script src="script.js"></script>
 </body>

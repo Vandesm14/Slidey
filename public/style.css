@@ -73,6 +73,7 @@ a, a:visited {
   display: flex;
   flex-direction: row;
   width: 100%;
+  height: 34px;
   border-bottom: 1px solid #464646;
   background: linear-gradient(0deg, hsl(110, 0%, 60%) 0%, hsl(110, 0%, 70%) 100%);
   box-shadow: 0 -1px 10px #000000cc;
@@ -94,8 +95,8 @@ a, a:visited {
 }
 
 .editor > .header > .group {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
   /* border-right: 2px solid #242424; */
 }
 
@@ -388,13 +389,13 @@ a, a:visited {
 
 /* Dynamic Menu */
 #groups {
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: none;
-	flex-direction: column;
-	width: max-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  width: max-content;
 }
 #groups.active {
-	display: flex;
+  display: flex;
 }

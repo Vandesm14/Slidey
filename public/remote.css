@@ -6,7 +6,7 @@ html, body, .app {
 }
 
 body {
-	background-color: #dbdbdb;
+  background-color: #dbdbdb;
   color: black;
   font-family: Calibri, sans-serif;
 }
@@ -27,26 +27,89 @@ a, a:visited {
   flex-direction: column;
 }
 
-/* ----------App---------- */
+/* ----------Global---------- */
 .row {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
-.row > .info {
-	text-align: center;
-	width: 100%;
-	padding: 20px;
+.col {
+  display: flex;
+  flex-direction: column;
 }
 
-.row > button {
-	background-color: #dbdbdb;
-	border: 1px solid black;
-	border-radius: 8px;
-	flex: 1;
-	font-size: 24px;
-	height: 40vh;
+/* ----------App---------- */
+.remoate {
+  display: flex;
+  flex-direction: column;
 }
-.row > button:active {
-	background-color: #a1a1a1;
+
+.remote > .row > .button-switchView {
+  height: 15vh;
+}
+
+.remote > .row > .info {
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.remote > .row > button {
+  flex: 1;
+  height: 45vh;
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: #dbdbdb;
+  font-size: 24px;
+}
+.remote > .row > button:active {
+  background-color: #a1a1a1;
+}
+
+.remote > .row:last-of-type > button {
+  height: 20vh;
+}
+
+.gallery > .header {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 34px;
+  border-bottom: 1px solid #464646;
+  background: linear-gradient(0deg, hsl(110, 0%, 60%) 0%, hsl(110, 0%, 70%) 100%);
+  box-shadow: 0 -1px 10px #000000cc;
+}
+
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 34px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  width: 18vw;
+  border: 4px solid grey;
+  border-radius: 6px;
+  background-color: #b8b8b8;
+}
+.tile.active {
+  border: 4px solid orange;
+}
+
+.tile > img {
+  width: 100%;
+  height: 100%;
+  /* border-radius: 6px; */
+
+  object-fit: contain;
+}
+
+.tile > p {
+  margin: 2px;
+  text-align: right;
 }
