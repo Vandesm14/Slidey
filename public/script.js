@@ -28,10 +28,12 @@ socket.on('remote', function (data) {
 			setFrame();
 			break;
 		case 'start':
+			if (slide === 0) return;
 			slide = 0;
 			setFrame(true);
 			break;
 		case 'end':
+			if (slide === cards.length - 1) return;
 			slide = cards.length - 1;
 			setFrame(true);
 			break;
@@ -43,6 +45,7 @@ socket.on('remote', function (data) {
 			setFrame(true);
 			break;
 		case 'init':
+			console.log('init');
 			socket.emit('info', {
 				id,
 				str: `${(slide + 1)} of ${cards.length}`
@@ -55,6 +58,7 @@ socket.on('slides', function () {
 });
 
 socket.on('control', function (data) {
+	if (slide === data.slide) return;
 	slide = data.slide;
 	setFrame(true);
 });

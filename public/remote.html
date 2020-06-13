@@ -12,7 +12,7 @@
 	<div class="app">
 		<div class="remote" id="remote">
 			<div class="row">
-				<button class="button-switchView">Switch View</button>
+				<button class="button-switchView">View Gallery</button>
 			</div>
 			<div class="row">
 				<h1 class="info">Slide 0 of 0</h1>
@@ -28,7 +28,15 @@
 			</div>
 		</div>
 		<div class="gallery" id="gallery" style="display:none">
-			<div class="header"></div>
+			<div class="header">
+				<div class="group">
+					<button class="button-switchView">View Remote</button>
+					<button class="button-theme">Theme</button>
+				</div>
+				<div class="group">
+					<button id="status"></button>
+				</div>
+			</div>
 			<div class="list" id="list"></div>
 		</div>
 	</div>

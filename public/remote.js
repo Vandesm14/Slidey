@@ -9,6 +9,7 @@ if (id) {
 } else if (storedid) {
 	id = storedid;
 }
+setStatus(true);
 socket.emit('init', {
 	id
 });
@@ -27,6 +28,7 @@ socket.on('info', function (data) {
 	
 	$('.active').removeClass('active');
 	$('.tile').eq(slide).addClass('active');
+	setStatus();
 });
 
 socket.on('slides', function (data) {
@@ -45,13 +47,21 @@ socket.on('slides', function (data) {
 var tiles = [];
 var slide = 0;
 var slides = 1;
+
 var viewMode = !!window.location.href.match(/\?m=tiles/g);
 switchView();
 
 $(document).ready(function () {
-	$('.remote .button-switchView').on('click', function () {
+	$('.button-switchView').on('click', function () {
 		viewMode = !viewMode;
 		switchView();
+	});
+	$('.button-theme').on('click', function () {
+		setStatus(true);
+		socket.emit('remote', {
+			id,
+			cmd: 'theme'
+		});
 	});
 
 	$('.remote .button-prev').on('click', function () {
@@ -78,12 +88,6 @@ $(document).ready(function () {
 			cmd: 'end'
 		});
 	});
-	$('.remote .button-theme').on('click', function () {
-		socket.emit('remote', {
-			id,
-			cmd: 'theme'
-		});
-	});
 });
 
 function switchView() {
@@ -91,9 +95,11 @@ function switchView() {
 		$('#gallery').show();
 		$('#remote').hide();
 		updateTiles();
+		window.history.pushState({}, document.title, window.location.origin + '/remote?m=tiles', '');
 	} else {
 		$('#remote').show();
 		$('#gallery').hide();
+		window.history.pushState({}, document.title, window.location.origin + '/remote', '');
 	}
 }
 
@@ -106,14 +112,20 @@ function updateTiles() {
 	
 	$('.active').removeClass('active');
 	$('.tile').eq(slide).addClass('active');
+	setStatus();
 }
 
 function calcListeners() {
 	$('.tile').off('click');
 	$('.tile').on('click', function () {
+		setStatus(true);
 		socket.emit('control', {
 			id,
 			slide: $(this).index()
 		});
 	});
+}
+
+function setStatus(status = false) {
+	$('#status').text(status ? 'Working...' : 'Done');
 }
