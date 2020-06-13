@@ -130,7 +130,7 @@ $(document).ready(function () {
 		slide = 0;
 		setFrame(true);
 		switchView();
-		// document.documentElement.requestFullscreen();
+		document.documentElement.requestFullscreen();
 	});
 	$('.header .button-theme').on('click', function () {
 		theme = (theme + 1) % 3;
@@ -155,7 +155,7 @@ $(document).ready(function () {
 			viewMode = !viewMode;
 			switchView();
 			setFrame(true);
-			// document.documentElement.requestFullscreen();
+			document.documentElement.requestFullscreen();
 		} else if (e.key === 'Tab' && viewMode) {
 			e.preventDefault();
 			theme = (theme + 1) % 3;
@@ -320,6 +320,7 @@ function switchView() {
 		$('#editor').hide();
 		updateFrames();
 	} else {
+		document.exitFullscreen();
 		$('#editor').show();
 		if (slide > 1) {
 			$('#editor').scrollTo(`.card:eq(${slide})`, 500);
@@ -441,6 +442,7 @@ function arrayEqual(arr1, arr2) {
 }
 
 function sendFrames(override = false) {
+	socket.emit('event', {id, event: 'frames', status: 'pending'});
 	let cache = version;
 	if (version === prevVersion && !override) {
 		socket.emit('slides', {

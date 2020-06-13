@@ -49,6 +49,7 @@ var slide = 0;
 var slides = 1;
 var lastSlide = -1;
 
+var status = '';
 
 var slideBack = ['ArrowDown', 'ArrowLeft', 'Backspace'];
 var slideForward = ['ArrowUp', 'ArrowRight', ' ', 'Enter'];
@@ -176,6 +177,7 @@ function calcListeners() {
 }
 
 function setStatus(status = false) {
+	if ()
 	$('#status').text(status ? 'Working...' : 'Done');
 }
 

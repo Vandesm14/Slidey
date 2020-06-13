@@ -119,7 +119,7 @@ a, a:visited {
 
   -webkit-appearance: none;
 }
-.gallery > .header .range-zoom::-moz-range-thumb {
+.gallery > .header .range-zoom::-moz-range-thumb, .gallery > .header .range-zoom::-webkit-slider-thumb {
   background: #464646;
 }
 
@@ -135,7 +135,6 @@ a, a:visited {
   overflow-y: auto;
   flex-direction: row;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
   margin: 0 auto;
   margin-top: 34px;
   max-height: calc(100vh - 34px);

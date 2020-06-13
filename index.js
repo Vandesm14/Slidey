@@ -57,6 +57,10 @@ io.on('connection', (socket) => {
 	socket.on('info', (data) => {
 		socket.to(data.id).emit('info', data);
 	});
+
+	socket.on('event', (data) => {
+		socket.to(data.id).emit('event', data);
+	});
 });
 
 function uuid4() {
