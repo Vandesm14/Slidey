@@ -177,7 +177,6 @@ function calcListeners() {
 }
 
 function setStatus(status = false) {
-	if ()
 	$('#status').text(status ? 'Working...' : 'Done');
 }
 

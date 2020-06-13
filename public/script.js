@@ -99,7 +99,7 @@ $(document).ready(function () {
 			if (text) {
 				cards = JSON.parse(text);
 			}
-			let preGroups = cards.map(el => el.group)
+			let preGroups = cards.map(el => el.group);
 			groups = preGroups.filter((el, i) => preGroups.indexOf(el) === i);
 			fromCards();
 		});

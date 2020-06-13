@@ -74,7 +74,7 @@ function uuid4() {
 }
 
 function otp() {
-	let pin = ''
+	let pin = '';
 	for (let i in '0'.repeat(6)) {
 		pin += Math.floor(Math.random() * 10);
 	}
