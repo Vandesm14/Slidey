@@ -31,14 +31,19 @@
 			<div class="header">
 				<div class="group">
 					<button class="button-switchView">View Remote</button>
+				</div>
+				<div class="group">
 					<button class="button-theme">Theme</button>
 					<button class="button-refresh">Refresh Tiles</button>
 				</div>
 				<div class="group">
+					<input type="range" class="range-zoom" min="2" max="7" step="1" value="5">
+				</div>
+				<div class="group right">
 					<button id="status"></button>
 				</div>
 			</div>
-			<div class="list" id="list"></div>
+			<div class="list z5" id="list"></div>
 		</div>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

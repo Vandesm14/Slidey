@@ -85,7 +85,6 @@ a, a:visited {
   padding: 6px 10px;
   height: 34px;
   border: none;
-  border-right: 2px solid #464646;
   background-color: transparent;
   color: black;
   font-size: 18px;
@@ -99,7 +98,10 @@ a, a:visited {
 .gallery > .header > .group {
   display: flex;
   flex-direction: row;
-  /* border-right: 2px solid #242424; */
+  border-right: 2px solid #464646;
+}
+.gallery > .header > .group.right {
+  margin-left: auto;
 }
 
 .gallery > .header button > img {
@@ -109,28 +111,78 @@ a, a:visited {
   object-fit: cover;
 }
 
+.gallery > .header .range-zoom {
+  margin: auto 6px;
+  width: 110px;
+  height: 4px;
+  background: #464646;
+
+  -webkit-appearance: none;
+}
+.gallery > .header .range-zoom::-moz-range-thumb {
+  background: #464646;
+}
+
+.gallery > .header #status {
+  font-weight: 900;
+}
+.gallery > .header #status:hover {
+  background-color: inherit;
+}
+
 .list {
   display: flex;
   overflow-y: auto;
   flex-direction: row;
   flex-wrap: wrap;
+  /* justify-content: space-between; */
+  margin: 0 auto;
   margin-top: 34px;
   max-height: calc(100vh - 34px);
+  width: 100vw;
 }
 
 .tile {
   display: flex;
   flex-direction: column;
   margin: 10px;
-  width: 18vw;
-  height: max-content;
-  height: 21vh;
   border: 4px solid grey;
   border-radius: 6px;
   background-color: #b8b8b8;
 }
 .tile.active {
   border: 4px solid orange;
+}
+
+.list.z2 > .tile {
+  margin: 1.4vw;
+  width: 46vw;
+  height: 53vh;
+}
+.list.z3 > .tile {
+  margin: 1.3vw;
+  width: 30vw;
+  height: 35vh;
+}
+.list.z4 > .tile {
+  margin: 1.2vw;
+  width: 22vw;
+  height: 25.2vh;
+}
+.list.z5 > .tile {
+  margin: 0.7vw;
+  width: 18vw;
+  height: 21vh;
+}
+.list.z6 > .tile {
+  margin: 1vw;
+  width: 14vw;
+  height: 16vh;
+}
+.list.z7 > .tile {
+  margin: 0.85vw;
+  width: 12vw;
+  height: 14vh;
 }
 
 .tile > img {
@@ -156,6 +208,9 @@ a, a:visited {
   }
   .gallery > .header button {
     border-bottom: 2px solid #464646;
+  }
+  .gallery > .header .range-zoom {
+    display: none;
   }
   .tile {
     width: calc(50vw - 28px);

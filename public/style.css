@@ -83,7 +83,6 @@ a, a:visited {
   padding: 6px 10px;
   height: 34px;
   border: none;
-  border-right: 2px solid #464646;
   background-color: transparent;
   color: black;
   font-size: 18px;
@@ -97,7 +96,7 @@ a, a:visited {
 .editor > .header > .group {
   display: flex;
   flex-direction: row;
-  /* border-right: 2px solid #242424; */
+  border-right: 2px solid #464646;
 }
 
 .editor > .header button > img {

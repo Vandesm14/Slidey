@@ -49,12 +49,14 @@ var slide = 0;
 var slides = 1;
 var lastSlide = -1;
 
+
 var slideBack = ['ArrowDown', 'ArrowLeft', 'Backspace'];
 var slideForward = ['ArrowUp', 'ArrowRight', ' ', 'Enter'];
 var slideKeys = '';
 
 var viewMode = !!window.location.href.match(/\?m=tiles/g);
 switchView();
+setZoom(localStorage.getItem('zoom') || 5);
 
 $(document).ready(function () {
 	$('.button-switchView').on('click', function () {
@@ -74,6 +76,9 @@ $(document).ready(function () {
 			id,
 			override: true
 		});
+	});
+	$('.range-zoom').on('input', function () {
+		setZoom($(this).val());
 	});
 
 	$('.remote .button-prev').on('click', function () {
@@ -172,4 +177,10 @@ function calcListeners() {
 
 function setStatus(status = false) {
 	$('#status').text(status ? 'Working...' : 'Done');
+}
+
+function setZoom(zoom) {
+	localStorage.setItem('zoom', zoom);
+	$('.range-zoom').val(zoom);
+	$('#list').attr('class', 'list z' + zoom);
 }
