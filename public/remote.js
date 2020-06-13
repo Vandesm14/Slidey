@@ -47,6 +47,11 @@ socket.on('slides', function (data) {
 var tiles = [];
 var slide = 0;
 var slides = 1;
+var lastSlide = -1;
+
+var slideBack = ['ArrowDown', 'ArrowLeft', 'Backspace'];
+var slideForward = ['ArrowUp', 'ArrowRight', ' ', 'Enter'];
+var slideKeys = '';
 
 var viewMode = !!window.location.href.match(/\?m=tiles/g);
 switchView();
@@ -94,6 +99,38 @@ $(document).ready(function () {
 			id,
 			cmd: 'end'
 		});
+	});
+
+	$(document).on('keydown', function (e) { // View-sepecific functions
+		if (viewMode) {
+			if (slideBack.includes(e.key)) {
+				slide = slide - 1 < 0 ? 0 : slide - 1;
+			} else if (slideForward.includes(e.key)) {
+				slide = slide + 1 >= tiles.length ? tiles.length - 1 : slide + 1;
+			} else if (e.key === 'Home') {
+				slide = 0;
+			} else if (e.key === 'End') {
+				slide = tiles.length - 1;
+			} else if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].includes(e.key)) {
+				slideKeys += e.key;
+				if (+slideKeys > tiles.length) slideKeys = '' + tiles.length;
+				return;
+			}
+			if (slideKeys) {
+				if (+slideKeys === 0) slideKeys = '1';
+				slide = +slideKeys - 1;
+				override = true;
+				slideKeys = '';
+				if (+slideKeys === lastSlide) return;
+			}
+			if (slide === lastSlide) return;
+			setStatus(true);
+			socket.emit('control', {
+				id,
+				slide
+			});
+			lastSlide = slide;
+		}
 	});
 });
 
