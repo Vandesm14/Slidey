@@ -180,6 +180,7 @@ function setStatus(status = false) {
 }
 
 function setZoom(zoom) {
+	if ($('.range-zoom').css('display') === 'none') return;
 	localStorage.setItem('zoom', zoom);
 	$('.range-zoom').val(zoom);
 	$('#list').attr('class', 'list z' + zoom);

@@ -60,7 +60,11 @@ socket.on('slides', function (data) {
 socket.on('control', function (data) {
 	if (slide === data.slide) return;
 	slide = data.slide;
-	setFrame(true);
+	if (slide - 1 === lastSlide || slide + 1 === lastSlide) {
+		setFrame();
+	} else {
+		setFrame(true);
+	}
 });
 
 var cards = [];

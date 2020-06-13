@@ -156,33 +156,21 @@ a, a:visited {
 
 .list.z2 > .tile {
   margin: 1.4vw;
-  width: 46vw;
-  height: 53vh;
 }
 .list.z3 > .tile {
   margin: 1.3vw;
-  width: 30vw;
-  height: 35vh;
 }
 .list.z4 > .tile {
   margin: 1.2vw;
-  width: 22vw;
-  height: 25.2vh;
 }
 .list.z5 > .tile {
   margin: 0.7vw;
-  width: 18vw;
-  height: 21vh;
 }
 .list.z6 > .tile {
   margin: 1vw;
-  width: 14vw;
-  height: 16vh;
 }
 .list.z7 > .tile {
   margin: 0.85vw;
-  width: 12vw;
-  height: 14vh;
 }
 
 .tile > img {
@@ -195,6 +183,31 @@ a, a:visited {
   object-fit: contain;
 }
 
+.list.z2 > .tile > img {
+  width: 46vw;
+  height: 53vh;
+}
+.list.z3 > .tile > img {
+  width: 29.5vw;
+  height: 33.8vh;
+}
+.list.z4 > .tile > img {
+  width: 22vw;
+  height: 25.2vh;
+}
+.list.z5 > .tile > img {
+  width: 18vw;
+  height: 21vh;
+}
+.list.z6 > .tile > img {
+  width: 14vw;
+  height: 16vh;
+}
+.list.z7 > .tile > img {
+  width: 12vw;
+  height: 14vh;
+}
+
 .tile > p {
   padding: 2px;
   height: max-content;
@@ -203,6 +216,9 @@ a, a:visited {
 
 /* ----------Mobile---------- */
 @media only screen and (max-device-width : 640px) {
+	#list {
+		margin-top: 70px;
+	}
   .gallery > .header {
     border-bottom: none;
   }
@@ -211,8 +227,12 @@ a, a:visited {
   }
   .gallery > .header .range-zoom {
     display: none;
-  }
-  .tile {
-    width: calc(50vw - 28px);
+	}
+	.tile {
+		margin: 1vw !important;
+	}
+  .tile > img {
+		width: 28.6vw !important;
+		height: 10vh !important;
   }
 }
