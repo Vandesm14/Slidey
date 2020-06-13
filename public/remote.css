@@ -74,8 +74,8 @@ a, a:visited {
   position: absolute;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
-  height: 34px;
   border-bottom: 1px solid #464646;
   background: linear-gradient(0deg, hsl(110, 0%, 60%) 0%, hsl(110, 0%, 70%) 100%);
   box-shadow: 0 -1px 10px #000000cc;
@@ -111,19 +111,20 @@ a, a:visited {
 
 .list {
   display: flex;
-	overflow-y: auto;
-	max-height: calc(100vh - 34px);
+  overflow-y: auto;
   flex-direction: row;
-	flex-wrap: wrap;
+  flex-wrap: wrap;
   margin-top: 34px;
+  max-height: calc(100vh - 34px);
 }
 
 .tile {
   display: flex;
   flex-direction: column;
   margin: 10px;
-	width: 18vw;
-	height: max-content;
+  width: 18vw;
+  height: max-content;
+  height: 21vh;
   border: 4px solid grey;
   border-radius: 6px;
   background-color: #b8b8b8;
@@ -133,19 +134,29 @@ a, a:visited {
 }
 
 .tile > img {
+  margin: auto;
   width: 100%;
-  height: 100%;
+  height: 86%;
+  border-bottom: 3px solid grey;
+  background-color: black;
 
   object-fit: contain;
 }
 
 .tile > p {
-  margin: 2px;
+  padding: 2px;
+  height: max-content;
   text-align: right;
 }
 
 /* ----------Mobile---------- */
 @media only screen and (max-device-width : 640px) {
+  .gallery > .header {
+    border-bottom: none;
+  }
+  .gallery > .header button {
+    border-bottom: 2px solid #464646;
+  }
   .tile {
     width: calc(50vw - 28px);
   }

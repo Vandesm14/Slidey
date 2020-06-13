@@ -63,6 +63,13 @@ $(document).ready(function () {
 			cmd: 'theme'
 		});
 	});
+	$('.button-refresh').on('click', function () {
+		setStatus(true);
+		socket.emit('slides', {
+			id,
+			override: true
+		});
+	});
 
 	$('.remote .button-prev').on('click', function () {
 		socket.emit('remote', {

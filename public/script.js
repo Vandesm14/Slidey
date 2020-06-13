@@ -53,8 +53,8 @@ socket.on('remote', function (data) {
 	}
 });
 
-socket.on('slides', function () {
-	sendFrames();
+socket.on('slides', function (data) {
+	sendFrames(data.override);
 });
 
 socket.on('control', function (data) {
@@ -289,7 +289,8 @@ function calcCards() {
 	$('.card').each(function (el) {
 		cards.push({
 			text: $(this).find('.text').val(),
-			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0]
+			pos: $(this).find('.button-position > img').attr('src').match(/pos-[0-9]+/)[0],
+			id: uuid4()
 		});
 	});
 	socket.emit('info', {
@@ -446,28 +447,36 @@ function sendFrames(override = false) {
 		return;
 	}
 	if (viewMode) {
-		tiles = [];
+		let arr = [];
 		$('.frame > *').css('opacity', '1');
 		setTimeout(function () {
 			$('.frame').each(async function (i) {
-				if (version !== cache) return;
 				let elem = $(this)[0];
-				await html2canvas(elem).then(canvas => {
-					if (version !== cache) return;
-					tiles.push(canvas.toDataURL());
-				});
+				if (version !== cache) return;
+				let canvas = await html2canvas(elem);
+				arr[i] = {
+					tile: canvas.toDataURL(),
+					id: cards[i].id
+				};
 				if (i === cards.length - 1) done();
 			});
 
 			function done() {
 				$('.frame > *').css('opacity', '');
 				if (version !== cache) return;
-				socket.emit('slides', {
-					id,
-					tiles
-				});
-				prevVersion = version;
-				console.log('sent');
+				if (arrayEqual(arr.map(el => el.id), cards.map(el => el.id))) {
+					arr = arr.map(el => el.tile);
+					socket.emit('slides', {
+						id,
+						tiles: arr
+					});
+					tiles = [...arr];
+					prevVersion = version;
+					console.log('sent');
+				} else {
+					console.log('Data error, recalculating...');
+					sendFrames(true);
+				}
 			}
 		}, 350);
 	}
