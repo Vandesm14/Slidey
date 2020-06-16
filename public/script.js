@@ -128,8 +128,8 @@ $(document).ready(function () {
 		e.stopPropagation();
 		viewMode = !viewMode;
 		slide = 0;
-		setFrame(true);
 		switchView();
+		setFrame(true);
 		document.documentElement.requestFullscreen();
 	});
 	$('.header .button-theme').on('click', function () {
@@ -150,7 +150,7 @@ $(document).ready(function () {
 		fromCards();
 	});
 
-	$(document)[0].addEventListener('keydown', function (e) { // Global functions
+	$(document).on('keydown', function (e) { // Global functions
 		if (e.key === 'Escape') {
 			viewMode = !viewMode;
 			switchView();
@@ -332,29 +332,29 @@ function switchView() {
 }
 
 function setFrame(override = false) {
+	let animation = 'slide';
 	if (slideKeys) {
 		if (+slideKeys === 0) slideKeys = '1';
 		slide = +slideKeys - 1;
-		override = true;
 		slideKeys = '';
 		if (+slideKeys === lastSlide) return;
 	}
 	if (lastSlide === slide && !override) return;
-	if (override || theme) {
-		$('#viewer').stop(true, true);
-		$('.show').removeClass('show');
-		setTimeout(function () {
-			$('#viewer').css('margin-left', -vw * slide);
-			$('.viewer > .frame').eq(slide).addClass('show');
-		}, 200);
-	} else {
-		$('#viewer').stop(true, true);
-		$('#viewer').animate({
-			marginLeft: -vw * slide
-		}, 300);
-		$('.show').removeClass('show');
-		$('.viewer > .frame').eq(slide).addClass('show');
-	}
+	if (lastSlide === -1) lastSlide = 0;
+
+	// DEV: Start of chunk
+	$('#viewer > .frame.now').replaceWith($('#render > .frame').eq(lastSlide).clone().addClass('now'));
+	reduceLines($('#viewer > .frame.now'));
+	$('#viewer > .frame.next').replaceWith($('#render > .frame').eq(slide).clone().addClass('next'));
+	reduceLines($('#viewer > .frame.next'));
+
+	$('.frame.next').addClass(animation);
+	setTimeout(function () {
+		$('#viewer > .frame.now').replaceWith($('#viewer > .frame.next').clone().addClass('now').removeClass('next'));
+		$('#viewer > .frame').removeClass(animation);
+	}, 300);
+	// DEV: End of chunk
+
 	socket.emit('info', {
 		id,
 		str: `${(slide + 1)} of ${cards.length}`
@@ -363,43 +363,33 @@ function setFrame(override = false) {
 }
 
 function updateFrames() {
-	$('#viewer').empty();
+	$('#render').empty();
 	for (let i in cards) {
 		let pos = +cards[i].pos.split('-')[1];
-		$('#viewer').append(`<div class="frame ${colors[i % colors.length]}"><div class="content">${render(cards[i].text)}</div></div>`);
-		$('#viewer > .frame').eq(i).addClass(cards[i].pos);
-
-		// $('#list > .card').eq(i).find('.card-id')
-		// .attr('class', 'card-id ' + colors[i % colors.length]);
+		$('#render').append(`<div class="frame ${colors[i % colors.length]}"><div class="content">${render(cards[i].text)}</div></div>`);
+		$('#render > .frame').eq(i).addClass(cards[i].pos);
 	}
-	$('#viewer > .frame > .content > p:only-child > img:only-child').parent().addClass('image-only');
-	$('#viewer > .frame > .content > p > img:only-child').parent().addClass('has-image');
-	$('#viewer > .frame').each(function (i) {
-		if ($(this).find('.content > p.has-image').length) {
-			$(this).addClass('has-image');
-			$(this).append('<div class="image"></div>');
-			$(this).find('.content > p.has-image').each(function () {
-				let image = $(this).parent().parent().find('.image');
-				$(this).detach().appendTo(image);
-			});
-		}
-		let maxlines = Math.round(vh / lineHeight(this));
-		let lines = getLines($(this).find('.content'));
-		if ($(this).is('.pos-2.has-image, .pos-6.has-image')) lines += getLines($(this).find('.image'));
-		if (lines > maxlines) {
-			$(this).css('font-size', `${36*(maxlines / lines)}px`);
-		}
+	$('#render > .frame').each(function (i) {
+		$(this).find('.content img').each(function () {
+			$(this).closest('.frame').addClass('has-image');
+			if ($(this).closest('.frame').has('.image') === 0) {
+				$(this).closest('.frame').append('<div class="image"></div>');
+			}
+			let image = $(this).closest('.frame').find('.image');
+			let parent = $(this).has(':only-child').closest('p');
+			$(this).detach().appendTo(image);
+			parent.remove();
+		});
+		reduceLines(this);
 	});
-	if (theme) {
-		for (let color of colors) {
-			$(`.frame.${color}`).removeClass(color);
-		}
-	}
+	if (theme)
+		for (let color of colors) $(`.frame.${color}`).removeClass(color);
 	if (theme === 1) {
-		$('#viewer').addClass('invert');
+		$('#render').addClass('invert');
 	} else {
-		$('#viewer').removeClass('invert');
+		$('#render').removeClass('invert');
 	}
+	// DEV: Testing
 	sendFrames();
 }
 
@@ -442,7 +432,11 @@ function arrayEqual(arr1, arr2) {
 }
 
 function sendFrames(override = false) {
-	socket.emit('event', {id, event: 'frames', status: 'pending'});
+	socket.emit('event', {
+		id,
+		event: 'frames',
+		status: 'pending'
+	});
 	let cache = version;
 	if (version === prevVersion && !override) {
 		socket.emit('slides', {
@@ -454,9 +448,8 @@ function sendFrames(override = false) {
 	}
 	if (viewMode) {
 		let arr = [];
-		$('.frame > *').css('opacity', '1');
 		setTimeout(function () {
-			$('.frame').each(async function (i) {
+			$('#render > .frame').each(async function (i) {
 				let elem = $(this)[0];
 				if (version !== cache) return;
 				let canvas = await html2canvas(elem);
@@ -468,7 +461,6 @@ function sendFrames(override = false) {
 			});
 
 			function done() {
-				$('.frame > *').css('opacity', '');
 				if (version !== cache) return;
 				if (arrayEqual(arr.map(el => el.id), cards.map(el => el.id))) {
 					arr = arr.map(el => el.tile);
@@ -486,4 +478,14 @@ function sendFrames(override = false) {
 			}
 		}, 350);
 	}
+}
+
+function reduceLines(elem) { // elem = .frame
+	let maxlines = Math.round(vh / lineHeight(elem));
+	let lines = getLines($(elem).find('.content'));
+	let mux = $(elem).hasClass('has-image') ? 1.6 : 1;
+	let mux2 = $(elem).parent().attr('id') === 'render' ? 36 / 3 : 36;
+	console.log(mux2);
+	if ($(elem).is('.pos-2.has-image, .pos-6.has-image')) lines += getLines($(elem).find('.image'));
+	if (lines > maxlines) $(elem).css('font-size', `${mux2*mux*(maxlines / lines)}px`);
 }

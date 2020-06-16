@@ -8,7 +8,8 @@ html, body, .app {
 body {
   background: linear-gradient(0deg, hsl(110, 70%, 30%) 0%, hsl(110, 80%, 60%) 100%);
   color: black;
-  font-family: Calibri, sans-serif;
+	font-family: Calibri, sans-serif;
+	overflow: hidden;
 }
 
 div, h1, p {
@@ -135,6 +136,89 @@ a, a:visited {
   margin-left: 20vw;
 }
 
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 85%;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 4px auto;
+  padding: 0 6px;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  margin: 4px;
+}
+
+.buttons > button {
+  margin: 2px;
+  padding: 2px;
+  width: 36px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  background-color: #aaaaaa;
+  color: white;
+  font-weight: 900;
+  font-size: 18px;
+  font-family: Calibri, sans-serif;
+}
+
+.buttons > .card-id {
+  padding-top: 0;
+  height: 56px;
+  border-radius: 4px;
+  color: white;
+  font-size: 20px;
+  cursor: move;
+}
+
+.buttons > .button-add {
+  background-color: #3faf3f;
+}
+
+.buttons > .button-remove {
+  background-color: #de3a3a;
+}
+
+.buttons > button.button-img {
+  padding: 0;
+  color: transparent;
+}
+
+.buttons > .button-img > img {
+  width: 100%;
+  height: 100%;
+}
+
+.text {
+  margin: 4px 4px;
+  padding: 4px;
+  max-height: 30vh;
+  width: 34vw;
+  height: 52px;
+  border: none;
+  border-radius: 4px;
+  background-color: #c0c0c0;
+  text-align: center;
+}
+.text.pos-1, .text.pos-7, .text.pos-8 {
+  text-align: left;
+}
+.text.pos-3, .text.pos-4, .text.pos-5 {
+  text-align: right;
+}
+
 .viewer {
   display: flex;
   flex-direction: row;
@@ -142,6 +226,7 @@ a, a:visited {
   height: 100%;
   background-color: black;
   cursor: none;
+	overflow: hidden;
 }
 .viewer.invert {
   background-color: white;
@@ -163,13 +248,14 @@ a, a:visited {
   justify-content: center;
   margin: auto;
   padding: 0 2vw;
-  width: calc(100vw - 4vw);
+  width: 100vw;
   height: 100%;
   color: white;
   text-align: center;
   font-size: 36px;
 
   user-select: none;
+	transition: transform 0ms;
 }
 .viewer.invert > .frame {
   color: black;
@@ -260,7 +346,8 @@ a, a:visited {
 }
 
 .viewer > .frame > * {
-  opacity: 0;
+	/* DEV: Possible removal */
+  /* opacity: 0; */
   transition: opacity 200ms linear;
 }
 .viewer > .frame.show > * {
@@ -281,109 +368,30 @@ a, a:visited {
   margin-left: 100px;
 }
 
+/* Animations */
+.viewer > .frame.slide {
+	transform: translateX(-100vw);
+	transition: transform 300ms ease-out;
+}
+
 .viewer > .frame > .content > p {
   margin: calc(22em/36) 0;
 }
 
-.viewer > .frame > .content > p.image-only {
-  width: 90%;
-  height: 90%;
-}
-
-.viewer > .frame > .content > p.image-only > img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: contain;
-}
-
-.viewer > .frame > .image > p.has-image > img {
+.viewer > .frame > .image > img {
   max-width: 100%;
   max-height: 100%;
 }
 
-.list {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 85%;
+#render {
+	position: absolute;
+	top: 110vh;
+	left: 0;
 }
 
-.card {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 4px auto;
-  padding: 0 6px;
-  border-radius: 4px;
-  background-color: white;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  margin: 4px;
-  /* width: 7%; */
-}
-
-.buttons > button {
-  margin: 2px;
-  padding: 2px;
-  width: 36px;
-  height: 26px;
-  border: none;
-  border-radius: 4px;
-  background-color: #aaaaaa;
-  color: white;
-  font-weight: 900;
-  font-size: 18px;
-  font-family: Calibri, sans-serif;
-}
-
-.buttons > .card-id {
-  padding-top: 0;
-  height: 56px;
-  border-radius: 4px;
-  color: white;
-  font-size: 20px;
-  cursor: move;
-}
-
-.buttons > .button-add {
-  background-color: #3faf3f;
-}
-
-.buttons > .button-remove {
-  background-color: #de3a3a;
-}
-
-.buttons > button.button-img {
-  padding: 0;
-  color: transparent;
-}
-
-.buttons > .button-img > img {
-  width: 100%;
-  height: 100%;
-}
-
-.text {
-  margin: 4px 4px;
-  padding: 4px;
-  max-height: 30vh;
-  width: 34vw;
-  height: 52px;
-  border: none;
-  border-radius: 4px;
-  background-color: #c0c0c0;
-  text-align: center;
-}
-.text.pos-1, .text.pos-7, .text.pos-8 {
-  text-align: left;
-}
-.text.pos-3, .text.pos-4, .text.pos-5 {
-  text-align: right;
+#render > .frame {
+	width: 30vw;
+	height: 30vh;
 }
 
 /* Dynamic Menu */
